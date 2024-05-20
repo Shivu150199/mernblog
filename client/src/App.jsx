@@ -1,6 +1,6 @@
-import { useState } from 'react'
+
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
-import './App.css'
+
 import About from './pages/About'
 import Dashboard from './pages/Dashboard'
 import NotFound from './pages/NotFound'
@@ -8,12 +8,14 @@ import Projects from './pages/Projects'
 import Signin from './pages/Sign-in'
 import Singup from './pages/Sign-ups'
 import Home from './pages/Home'
+import Header from './component/Header'
 
 function App() {
   
 
   return (
     <BrowserRouter>
+    <Header/>
 <Routes>
   <Route path="/" element={<Home/>} />
   <Route path="/about" element={<About />} />
