@@ -3,22 +3,28 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import authRouter from './route/auth.route.js'
 dotenv.config()
-const app =express()
-const port=process.env.PORT||3000
-
+const app = express()
+const port = process.env.PORT || 3000
 
 app.use(express.json())
-app.use('/api/auth/v1',authRouter)
-app.get('/',(req,res)=>{
-    res.send('hello world')
+app.use('/api/auth/v1', authRouter)
+
+//middleware for error hadnling
+app.use((err, req, res, next) => {
+  const status = err.statusCode || 500
+  const message = err.message || 'internal server error'
+  res.status(status).json({
+    success: false,
+    message,
+    status,
+  })
 })
 
-
-let connection=mongoose.connect(process.env.MONGO_URI).then(()=>{
-    console.log('ha bhai ho gaya connect')
+let connection = mongoose.connect(process.env.MONGO_URI).then(() => {
+  console.log('ha bhai ho gaya connect')
 })
 
-app.listen(port,async()=>{
-    await connection
-    console.log('ha bhai chal gaya ')
+app.listen(port, async () => {
+  await connection
+  console.log('ha bhai chal gaya ')
 })
