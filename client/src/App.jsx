@@ -9,6 +9,7 @@ import Signin from './pages/Sign-in'
 import Singup from './pages/Sign-ups'
 import Home from './pages/Home'
 import Header from './component/Header'
+import Fotter from './component/Fotter'
 
 function App() {
   
@@ -26,7 +27,7 @@ function App() {
   <Route path="*" element={<NotFound />} />
 </Routes>
 
-
+<Fotter/>
     </BrowserRouter>
   )
 }
