@@ -10,8 +10,8 @@ const Header = () => {
   const path=useLocation()
   return (
     <Navbar fluid rounded>
-      <Link to="/" className="flex gap-2 items-center font-bold">
-        <Badge className="p-2 from-green-400 via-stone-400 to-amber-900">
+      <Link to="/" className="flex gap-1 items-center font-bold">
+        <Badge className="p-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded ">
           MERN
         </Badge>{' '}
         Blog
