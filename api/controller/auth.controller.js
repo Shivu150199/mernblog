@@ -1,6 +1,9 @@
 import User from "../model/auth.model.js"
 import bcryptjs from 'bcryptjs'
 import { errorHandler } from "../utils/error.js"
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config()
 export const signup=async(req,res,next)=>{
     try{
 const {username,password,email}=req.body
@@ -25,5 +28,40 @@ return res.status(201).send({
         //     status:'error',
         //     message:err.message
         // })
+    }
+}
+
+
+
+export const signin=async(req,res,next)=>{
+    const {email,password}=req.body
+    if(!email||!password||email==="",password===""){
+        next(errorHandler(400,'requird all fileds'))
+    }
+
+
+    try{
+const validUser=await User.findOne({email})
+if(!validUser){
+    return next(errorHandler(404,'data not found'))
+}
+const validPassword=bcryptjs.compareSync(password,validUser.password)
+if(!validPassword){
+    return next(errorHandler(400,'wrong password'))
+}
+
+const token =jwt.sign({id:validUser._id},process.env.JWT_SECRET_KEY)
+const {password:pass,...rest}=validUser._doc
+res.status(200).cookie('access_token',token,{httpOnly:true}).json({
+    status:'success',
+    message:'login successfull',
+    data:rest,
+    token
+
+})
+ 
+
+    }catch(err){
+next(errorHandler(404,'page not found'))
     }
 }
