@@ -2,38 +2,45 @@ import React, { useState } from 'react'
 import { Label, TextInput } from 'flowbite-react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { signInPending, signInRejected, signInSuccess } from '../redux/authSlice'
+import OAuth from '../component/OAuth'
 
 const Signin = () => {
+  const {loading,error,user}=useSelector(state=>state.authState)
+  console.log(loading,error,user)
   const [formData, setFormData] = useState({})
-  const [errorMessage, setErrorMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  // const [errorMessage, setErrorMessage] = useState('')
+  // const [loading, setLoading] = useState(false)
+  // const [error, setError] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!formData.email || !formData.password) {
-      alert('Please fill all the fields')
-      setErrorMessage('Please fill all the fields')
-      setTimeout(() => {
-        setErrorMessage('')
-      }, 2000)
-      return
-    }
-    setLoading(true)
+    // if (!formData.email || !formData.password) {
+    //   alert('Please fill all the fields')
+    //   setErrorMessage('Please fill all the fields')
+    //   setTimeout(() => {
+    //     setErrorMessage('')
+    //   }, 2000)
+    //   return
+    // }
+    // setLoading(true)
+    dispatch(signInPending())
     try {
       let res = await axios.post('/api/auth/v1/signin', formData)
-      console.log(res)
-      setLoading(false)
+      dispatch(signInSuccess(res.data))
 
       navigate('/')
     } catch (err) {
       console.log(err)
-      setErrorMessage('username or email already taken')
-      setTimeout(() => {
-        setErrorMessage('')
-      }, 2000)
+      // setErrorMessage('username or email already taken')
+      // setTimeout(() => {
+      //   setErrorMessage('')
+      // }, 2000)
+      dispatch(signInRejected(err))
 
-      setLoading(false)
+      // setLoading(false)
       // setFormData({
       //   username:'',
       //   email:'',
@@ -94,7 +101,8 @@ const Signin = () => {
           >
             {loading ? <span className="loading">loading</span> : 'Sign In'}
           </button>
-          <p className="text-red-700 text-xs">{errorMessage}</p>
+            <OAuth/>
+          {/* <p className="text-red-700 text-xs">{error&&error.message}</p> */}
           <div className="mt-4">
             <span>Do not have an account ?</span>
             <Link to="/sign-up" className="text-blue-700 hover:text-blue-400">

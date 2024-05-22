@@ -65,3 +65,16 @@ res.status(200).cookie('access_token',token,{httpOnly:true}).json({
 next(errorHandler(404,'page not found'))
     }
 }
+
+
+// export const googleAuth=async(req,res,next)=>{
+
+// try{
+
+
+// }
+
+// catch(err){
+//     next(errorHandler(404,'google login failed '))
+// }
+// }

@@ -1,12 +1,24 @@
 import { Avatar, Dropdown, Navbar, NavbarLink, TextInput } from 'flowbite-react'
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Badge } from 'flowbite-react'
 import { CiSearch} from 'react-icons/ci'
 import { IoIosMoon } from "react-icons/io";
+import { useDispatch, useSelector } from 'react-redux'
+import { handleLogout } from '../redux/authSlice'
 
 
 const Header = () => {
+  const leChalo=useNavigate()
+  const dispatch=useDispatch()
+  const {user}=useSelector(state=>state.authState)
+  // const h=useSelector(state=>state.authState)
+  console.log(user)
+  // console.log(h)
+  const logout=()=>{
+      dispatch(handleLogout())
+      leChalo('/sign-in')
+  }
   const path=useLocation()
   return (
     <Navbar fluid rounded>
@@ -24,19 +36,6 @@ const Header = () => {
           // rightIcon={<CiSearch />}
         />
       </form>
-
-      <Link
-        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-        to="/sign-in"
-      >
-        Login
-      </Link>
-      <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-        <IoIosMoon />
-      </button>
-      <div className="flex md:order-2">
-        <Navbar.Toggle />
-      </div>
       <Navbar.Collapse>
         {/* <Link to="/" >Home</Link>
        
@@ -52,6 +51,58 @@ const Header = () => {
           <Link to="/about">About</Link>
         </Navbar.Link>
       </Navbar.Collapse>
+      <div className="flex items-center gap-2">
+        <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold  py-2 px-4 border rounded hover:shadow-xl hover:scale-105 transition-all">
+          <IoIosMoon />
+        </button>
+
+        {user ? (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src={user&&user.data.photo}
+                />
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a className="justify-between">
+                  Profile
+                  <span className="badge">New</span>
+                </a>
+              </li>
+              <li>
+                <a>Settings</a>
+              </li>
+              <li onClick={logout}>
+            <button>Logout</button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link
+            className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 px-4 border hover:border-transparent rounded"
+            to="/sign-in"
+          >
+            Login
+          </Link>
+        )}
+        <div className="flex md:order-2">
+          <Navbar.Toggle />
+        </div>
+        {/*  */}
+
+        {/*  */}
+      </div>
     </Navbar>
   )
 }
