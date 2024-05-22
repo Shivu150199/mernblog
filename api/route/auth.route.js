@@ -6,7 +6,7 @@ const router=express.Router();
 
 router.post('/signup',signup)
 router.post('/signin',signin)
-router.post('/googlesign',googleAuth)
+router.post('/googleauth',googleAuth)
 
 
 export default router;

@@ -10,22 +10,12 @@ const Signin = () => {
   const {loading,error,user}=useSelector(state=>state.authState)
   console.log(loading,error,user)
   const [formData, setFormData] = useState({})
-  // const [errorMessage, setErrorMessage] = useState('')
-  // const [loading, setLoading] = useState(false)
-  // const [error, setError] = useState(false)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const handleSubmit = async (e) => {
     e.preventDefault()
-    // if (!formData.email || !formData.password) {
-    //   alert('Please fill all the fields')
-    //   setErrorMessage('Please fill all the fields')
-    //   setTimeout(() => {
-    //     setErrorMessage('')
-    //   }, 2000)
-    //   return
-    // }
-    // setLoading(true)
+  
     dispatch(signInPending())
     try {
       let res = await axios.post('/api/auth/v1/signin', formData)
@@ -34,18 +24,8 @@ const Signin = () => {
       navigate('/')
     } catch (err) {
       console.log(err)
-      // setErrorMessage('username or email already taken')
-      // setTimeout(() => {
-      //   setErrorMessage('')
-      // }, 2000)
+   
       dispatch(signInRejected(err))
-
-      // setLoading(false)
-      // setFormData({
-      //   username:'',
-      //   email:'',
-      //   password:''
-      // })
     }
   }
   const handleChange = (e) => {
@@ -106,7 +86,7 @@ const Signin = () => {
           <div className="mt-4">
             <span>Do not have an account ?</span>
             <Link to="/sign-up" className="text-blue-700 hover:text-blue-400">
-              Login
+              Sign up
             </Link>
           </div>
         </form>

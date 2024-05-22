@@ -13,7 +13,7 @@ const Header = () => {
   const dispatch=useDispatch()
   const {user}=useSelector(state=>state.authState)
   // const h=useSelector(state=>state.authState)
-  console.log(user)
+  // console.log(user.data.photo)
   // console.log(h)
   const logout=()=>{
       dispatch(handleLogout())

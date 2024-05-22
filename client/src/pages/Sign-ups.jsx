@@ -3,6 +3,7 @@ import {Label, TextInput} from 'flowbite-react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { timeout } from '../../utils/timeout'
+import OAuth from '../component/OAuth'
 
 const Singup = () => {
   const [formData,setFormData]=useState({})
@@ -63,26 +64,49 @@ console.log(formData)
         </p>
       </div>
       <div className="flex-1  flex items-center justify-center flex-col">
-        <form className="shadow p-4 rounded flex items-center justify-center flex-col w-80" onSubmit={handleSubmit}>
+        <form
+          className="shadow p-4 rounded flex items-center justify-center flex-col w-80"
+          onSubmit={handleSubmit}
+        >
           <h1 className="bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text text-xl font-bold text-center">
             Signup form
           </h1>
           <div className="w-full">
             <Label value="Username" />
-            <TextInput type="text" placeholder="username" id="username" onChange={handleChange} />
+            <TextInput
+              type="text"
+              placeholder="username"
+              id="username"
+              onChange={handleChange}
+            />
           </div>
           <div className="w-full">
             <Label value="Email" />
-            <TextInput type="email" placeholder="Email" id="email" onChange={handleChange} />
+            <TextInput
+              type="email"
+              placeholder="Email"
+              id="email"
+              onChange={handleChange}
+            />
           </div>
           <div className="w-full">
             <Label value="Password" />
-            <TextInput type="password" placeholder="password" id="password" onChange={handleChange} />
+            <TextInput
+              type="password"
+              placeholder="password"
+              id="password"
+              onChange={handleChange}
+            />
           </div>
-          <button disabled={loading} tyep='submit' className="btn bg-gradient-to-r from-green-400 to-blue-500 text-white hover:bg-blue-500 mt-4 w-full">
-         {loading?<span className='loading'>loading</span>:'Sign Up'}
+          <button
+            disabled={loading}
+            tyep="submit"
+            className="btn bg-gradient-to-r from-green-400 to-blue-500 text-white hover:bg-blue-500 mt-4 w-full"
+          >
+            {loading ? <span className="loading">loading</span> : 'Sign Up'}
           </button>
-          <p className='text-red-700 text-xs'>{errorMessage}</p>
+          <OAuth />
+          <p className="text-red-700 text-xs">{errorMessage}</p>
           <div className="mt-4">
             <span>have an account ?</span>
             <Link to="/sign-in" className="text-blue-700 hover:text-blue-400">
