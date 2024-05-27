@@ -3,11 +3,15 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import authRouter from './route/auth.route.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 dotenv.config()
 const app = express()
+
 const port = process.env.PORT || 3000
 app.use(cors())
+
 app.use(express.json())
+app.use(cookieParser())
 app.use('/api/auth/v1', authRouter)
 
 //middleware for error hadnling

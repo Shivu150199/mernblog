@@ -13,6 +13,7 @@ import Fotter from './component/Fotter'
   import { ToastContainer, toast } from 'react-toastify'
 
   import 'react-toastify/dist/ReactToastify.css'
+import PrivateRoute from './component/PrivateRoute'
 
 function App() {
   
@@ -24,7 +25,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route element={<PrivateRoute/>}>
+
         <Route path="/dashboard" element={<Dashboard />} />
+
+        </Route>
         <Route path="/sign-up" element={<Singup />} />
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/project" element={<Projects />} />

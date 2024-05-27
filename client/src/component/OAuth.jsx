@@ -25,7 +25,7 @@ let res = await axios.post('http://localhost:3000/api/auth/v1/googleauth', {
 })
 console.log(res.data)
 dispatch(signInSuccess(res.data))
-navigate('/')
+navigate('/dashboard')
 }catch(error){
   dispatch(signInRejected(err))
 console.log(error)
