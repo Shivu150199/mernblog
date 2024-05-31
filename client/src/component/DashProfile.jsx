@@ -1,80 +1,121 @@
 import { Label, TextInput, Toast } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector, } from 'react-redux'
-import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
-
-import {app} from '../firebase'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage'
+import axios from 'axios'
+import { app } from '../firebase'
 import { toast } from 'react-toastify'
+
+import {
+  
+  updatePending,
+  updateRejected,
+  updateSuccess,
+} from '../redux/authSlice'
+
+
 const DashProfile = () => {
-  const  {user}= useSelector((state) => state.authState)
-  const fileRef=useRef()
-  const [imageFile,setImageFile]=useState(null)
-  const [imageFileURL,setImageFileURL]=useState(null)
-  const [imageProgress ,setImageProgress]=useState(0)
-const [fileUploadError,setFileUploadError]=useState(null)
+  const { user, loading, error } = useSelector((state) => state.authState)
+  // console.log(user)
+  const fileRef = useRef()
+
+  const [imageFile, setImageFile] = useState(null)
+  const [imageFileURL, setImageFileURL] = useState(null)
+  const [imageProgress, setImageProgress] = useState(0)
+  const [fileUploadError, setFileUploadError] = useState(null)
+  const [formData, setFormData] = useState(null)
+
+  const dispatch = useDispatch()
+  // console.log(user)
+  
+
+  const handleSubmit=async(e)=>{
+e.preventDefault()
+
+ try{
+  dispatch(updatePending())
+const res=await fetch('/api/auth/v1/update/'+user.data._id,{
+  method:'PUT',
+  headers:{
+    'Content-Type':'application/json',
+  },
+  body:JSON.stringify(formData)
+})
+ const data=await res.json()
+
+ dispatch(updateSuccess(data))
+ }catch(err){
+  console.log(err)
+  dispatch(updateRejected(err))
+ }  
 
 
 
-  console.log(user)
-  const handleSubmit = () => {}
-  const handleChange = () => {}
-  const loading = false
-  const error = false
-  const handleImageChange=(e)=>{
-    let file=e.target.files[0]
-    if(file){
+  }
+  
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value })
+  }
 
+  const handleImageChange = (e) => {
+    let file = e.target.files[0]
+    if (file) {
       setImageFile(file)
       setImageFileURL(URL.createObjectURL(file))
     }
   }
-//   rules_version = '2';
+  //   rules_version = '2';
 
-// // Craft rules based on data in your Firestore database
-// // allow write: if firestore.get(
-// //    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
-// service firebase.storage {
-//   match /b/{bucket}/o {
-//     match /{allPaths=**} {
-//       allow read;
-//       allow write: if
-//       request.resource.size < 2 *1024 *1024 &&
-//       request.resource.contentType.matches('image/.*')
-//     }
-//   }
-// }
-  console.log(imageFile)
-  console.log(imageFileURL)
-useEffect(()=>{
-  if(imageFile){
-    uploadImage()
+  // // Craft rules based on data in your Firestore database
+  // // allow write: if firestore.get(
+  // //    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
+  // service firebase.storage {
+  //   match /b/{bucket}/o {
+  //     match /{allPaths=**} {
+  //       allow read;
+  //       allow write: if
+  //       request.resource.size < 2 *1024 *1024 &&
+  //       request.resource.contentType.matches('image/.*')
+  //     }
+  //   }
+  // }
+
+  useEffect(() => {
+    if (imageFile) {
+      uploadImage()
+    }
+  }, [imageFile])
+
+  const uploadImage = () => {
+    const storage = getStorage(app)
+    const fileName = new Date().getTime() + imageFile.name
+    const storageRef = ref(storage, fileName)
+    const uploadTask = uploadBytesResumable(storageRef, imageFile)
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        setImageProgress(progress.toFixed(0))
+      },
+      (error) => {
+        setFileUploadError('could not upload (file should beless than 2m b)')
+        toast('could not upload (file should beless than 2m b)')
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          setImageFileURL(url)
+          setFormData({ ...formData, photo: url })
+        })
+      }
+    )
   }
-},[imageFile])
-
-const uploadImage = ()=>{
-const storage=getStorage(app)
-const fileName=new Date().getTime()+imageFile.name
-const storageRef=ref(storage,fileName)
-const uploadTask=uploadBytesResumable(storageRef,imageFile)
-uploadTask.on('state_changed',(snapshot)=>{
-  const progress=(snapshot.bytesTransferred/snapshot.totalBytes)*100
-setImageProgress(progress.toFixed(0))
-
-
-},
-(error)=>{
-setFileUploadError('could not upload (file should beless than 2m b)')
-toast('could not upload (file should beless than 2m b)')
-},
-()=>{
-  getDownloadURL(uploadTask.snapshot.ref).then((url)=>{
-    setImageFileURL(url)
-  })
-}
-)
-
-}
-console.log(imageProgress,fileUploadError,imageFileURL)
+  console.log(user)
+  console.log(formData)
   return (
     <form
       className="shadow p-4 rounded flex items-center justify-center flex-col w-80"
@@ -83,10 +124,31 @@ console.log(imageProgress,fileUploadError,imageFileURL)
       <h1 className="bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text text-xl font-bold text-center">
         Profile
       </h1>
-      <div className='flex items-center justify-center relative'>
-        <p className='absolute top-2 left-2 text-white'>{imageProgress} %</p>
-        <img src={imageFileURL||user.data.photo} alt="profile" className='w-[3rem] h-[3rem] object-cover rounded' onClick={()=>fileRef.current.click()}/>
-        <input type="file" accept='image/*' onChange={handleImageChange} ref={fileRef} hidden/>
+      <div className="flex items-center justify-center relative">
+        <p className="absolute top-2 left-2 text-white">{imageProgress} %</p>
+        <img
+          src={imageFileURL || user.data.photo}
+          alt="profile"
+          className="w-[3rem] h-[3rem] object-cover rounded"
+          onClick={() => fileRef.current.click()}
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          ref={fileRef}
+          hidden
+        />
+      </div>
+      <div className="w-full">
+        <Label value="Username" />
+        <TextInput
+          type="text"
+          placeholder="username"
+          id="username"
+          onChange={handleChange}
+          defaultValue={user.data.username}
+        />
       </div>
       <div className="w-full">
         <Label value="Email" />
@@ -95,6 +157,7 @@ console.log(imageProgress,fileUploadError,imageFileURL)
           placeholder="Email"
           id="email"
           onChange={handleChange}
+          defaultValue={user.data.email}
         />
       </div>
       <div className="w-full">

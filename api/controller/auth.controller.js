@@ -141,10 +141,7 @@ export const updateUser = async (req, res, next) => {
         photo:req.body.photo,
     
       }
-    }, {
-      new: true,
-     
-    })
+    }, {new: true})
     if (!updateUser) {
       return next(errorHandler(404, 'user not found'))
     }

@@ -3,17 +3,18 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiArrowSmRight, HiUser } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
+import { handleLogout } from '../redux/authSlice'
 const DashSidebar = () => {
     const dispatch=useDispatch()
    const leChalo= useNavigate()
   const location = useLocation()
   const [tab, setTab] = useState()
-  console.log(location)
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
-    console.log(searchParams)
+   
     const tabFromUrl = searchParams.get('tab')
-    console.log(tabFromUrl)
+
     setTab(tabFromUrl)
   }, [location.search])
   const signout = () => {

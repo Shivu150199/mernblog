@@ -21,7 +21,7 @@ const Signin = () => {
       let res = await axios.post('/api/auth/v1/signin', formData)
       dispatch(signInSuccess(res.data))
 
-      navigate('/dashboard')
+      navigate('/dashboard?tab=profile')
     } catch (err) {
       console.log(err)
    
