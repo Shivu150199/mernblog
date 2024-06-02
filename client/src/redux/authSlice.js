@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Navigate } from 'react-router-dom'
+
 import { toast } from 'react-toastify'
 
 const initialState = {
   loading: false,
   error: null,
-  user: {},
+  user:null,
 }
 const authSlice = createSlice({
   name: 'auth',
@@ -45,10 +45,26 @@ const authSlice = createSlice({
       state.error = action.payload
       toast(action.payload.message)
     },
+    deleteUserPending:(state)=>{
+      state.loading=true
+      state.error=null
+    },
+    deleteUserSuccess:(state)=>{
+      state.loading=false
+      state.user=null
+      state.error=null
+      toast('user deleted successfully')
+    },
+    deleteUserRejected:(state,action)=>{
+state.loading=false
+state.error=action.payload
+toast(action.payload.message)
+    }
+    
   },
 })
 
-export const { signInPending, signInRejected, signInSuccess, handleLogout ,updatePending,updateRejected,updateSuccess} =
+export const {deleteUserPending,deleteUserRejected,deleteUserSuccess, signInPending, signInRejected, signInSuccess, handleLogout ,updatePending,updateRejected,updateSuccess} =
   authSlice.actions
 
 export default authSlice.reducer

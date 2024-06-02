@@ -10,20 +10,22 @@ import {
 import axios from 'axios'
 import { app } from '../firebase'
 import { toast } from 'react-toastify'
-
+import {useNavigate} from 'react-router-dom'
 import {
   
+  deleteUserPending,
+  deleteUserRejected,
+  deleteUserSuccess,
   updatePending,
   updateRejected,
   updateSuccess,
 } from '../redux/authSlice'
 
-
 const DashProfile = () => {
   const { user, loading, error } = useSelector((state) => state.authState)
   // console.log(user)
   const fileRef = useRef()
-
+const navigate=useNavigate()
   const [imageFile, setImageFile] = useState(null)
   const [imageFileURL, setImageFileURL] = useState(null)
   const [imageProgress, setImageProgress] = useState(0)
@@ -116,6 +118,22 @@ const res=await fetch('/api/auth/v1/update/'+user.data._id,{
   }
   console.log(user)
   console.log(formData)
+  const handleDelete=async(e)=>{
+e.preventDefault()
+dispatch(deleteUserPending())
+    try{
+      const res=await axios.delete('/api/auth/v1/delete/'+user.data._id)
+      console.log(res)
+      dispatch(deleteUserSuccess())
+      navigate('/sing-in')
+
+    }catch(err){
+console.log(err)
+dispatch(deleteUserRejected(err))
+    }
+
+
+  }
   return (
     <form
       className="shadow p-4 rounded flex items-center justify-center flex-col w-80"
@@ -176,6 +194,10 @@ const res=await fetch('/api/auth/v1/update/'+user.data._id,{
       >
         {loading ? <span className="loading">loading</span> : 'Update Profile'}
       </button>
+      <div className='flex w-full justify-between mt-4 '>
+        <button onClick={handleDelete} className='capitalize text-sky-500 hover:text-sky-700'>delete user</button>
+        <button className='capitalize text-sky-500 hover:text-sky-700'>log out user</button>
+      </div>
 
       {/* <p className="text-red-700 text-xs">{error&&error.message}</p> */}
     </form>

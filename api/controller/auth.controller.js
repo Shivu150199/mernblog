@@ -156,3 +156,28 @@ export const updateUser = async (req, res, next) => {
     next(errorHandler(404, 'user update failes'))
   }
 }
+
+
+
+
+export const deleteUser=async(req,res,next)=>{
+let paramId=req.params.id
+let userId=req.user.id
+if(paramId!==userId){
+  return next(errorHandler('404','param id is not equal to user id that why this error is occur'))
+}
+
+
+
+  try{
+let deletedUser=await User.findByIdAndDelete(paramId)
+res.status(204).json({
+  status:'success',
+  message:'user deleted successfully',
+  
+})
+  }catch(err){
+    next(errorHandler(404,'not able to delete user'))
+  }
+
+}
