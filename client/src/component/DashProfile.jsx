@@ -10,7 +10,7 @@ import {
 import axios from 'axios'
 import { app } from '../firebase'
 import { toast } from 'react-toastify'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {
   
   deleteUserPending,
@@ -197,11 +197,18 @@ dispatch(deleteUserRejected(err))
       </div>
       <button
         disabled={loading}
-        tyep="submit"
+        type="submit"
         className="btn bg-gradient-to-r from-green-400 to-blue-500 text-white hover:bg-blue-500 mt-4 w-full"
         >
         {loading ? <span className="loading">loading</span> : 'Update Profile'}
       </button>
+      {
+        user.data.isAdmin&&(
+          <Link to='/create-post' className='w-full'>
+          <button type='button'  className="btn bg-gradient-to-r from-green-400 to-blue-500 text-white hover:bg-blue-500 mt-4 w-full">Create a post</button>
+          </Link>
+        )
+      }
       <div className='flex w-full justify-between mt-4 '>
         {/* <button type='button' onClick={()=>setShowModel(true)} className='capitalize text-sky-500 hover:text-sky-700'>delete user</button> */}
       <DeleteModal onClose={handleDelete} btnText='Delete user'/>

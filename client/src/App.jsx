@@ -14,6 +14,8 @@ import Fotter from './component/Fotter'
 
   import 'react-toastify/dist/ReactToastify.css'
 import PrivateRoute from './component/PrivateRoute'
+import CreatePost from './pages/CreatePost'
+import AdminPrivateRoute from './component/AdminPrivateRoute'
 
 function App() {
   
@@ -30,6 +32,11 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
 
         </Route>
+<Route element={<AdminPrivateRoute/>}>
+
+<Route path='/create-post' element={<CreatePost/>}/>
+</Route>
+
         <Route path="/sign-up" element={<Singup />} />
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/project" element={<Projects />} />

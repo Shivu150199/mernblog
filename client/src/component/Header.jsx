@@ -6,7 +6,7 @@ import { CiSearch} from 'react-icons/ci'
 import { IoIosMoon } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
 import { handleLogout } from '../redux/authSlice'
-
+import axios from 'axios'
 
 const Header = () => {
   const leChalo=useNavigate()
@@ -15,7 +15,9 @@ const Header = () => {
   // const h=useSelector(state=>state.authState)
   // console.log(user.data.photo)
   // console.log(h)
-  const logout=()=>{
+  const logout=async()=>{
+    let res=await axios.post('/api/auth/v1/signout')
+    console.log(res)
       dispatch(handleLogout())
       leChalo('/sign-in')
   }
@@ -66,7 +68,7 @@ const Header = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  // src={user.data.photo}
+                  src={user&&user.data.photo}
                 />
               </div>
             </div>
