@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import authRouter from './route/auth.route.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import postRouter from './route/post.route.js'
 dotenv.config()
 const app = express()
 
@@ -13,6 +14,7 @@ app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 app.use('/api/auth/v1', authRouter)
+app.use('/api/post/v1', postRouter)
 
 //middleware for error hadnling
 app.use((err, req, res, next) => {
