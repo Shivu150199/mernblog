@@ -16,15 +16,18 @@ import {
   deleteUserPending,
   deleteUserRejected,
   deleteUserSuccess,
+  handleLogout,
   updatePending,
   updateRejected,
   updateSuccess,
 } from '../redux/authSlice'
+import DeleteModal from './DeleteModal'
 
 const DashProfile = () => {
   const { user, loading, error } = useSelector((state) => state.authState)
   // console.log(user)
   const fileRef = useRef()
+  const [showModel,setShowModel]=useState(false)
 const navigate=useNavigate()
   const [imageFile, setImageFile] = useState(null)
   const [imageFileURL, setImageFileURL] = useState(null)
@@ -134,11 +137,16 @@ dispatch(deleteUserRejected(err))
 
 
   }
+  console.log(showModel)
+  const handleSignout=()=>{
+    dispatch(handleLogout())
+  }
   return (
+    <>
     <form
       className="shadow p-4 rounded flex items-center justify-center flex-col w-80"
       onSubmit={handleSubmit}
-    >
+      >
       <h1 className="bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text text-xl font-bold text-center">
         Profile
       </h1>
@@ -166,7 +174,7 @@ dispatch(deleteUserRejected(err))
           id="username"
           onChange={handleChange}
           defaultValue={user.data.username}
-        />
+          />
       </div>
       <div className="w-full">
         <Label value="Email" />
@@ -176,7 +184,7 @@ dispatch(deleteUserRejected(err))
           id="email"
           onChange={handleChange}
           defaultValue={user.data.email}
-        />
+          />
       </div>
       <div className="w-full">
         <Label value="Password" />
@@ -191,16 +199,21 @@ dispatch(deleteUserRejected(err))
         disabled={loading}
         tyep="submit"
         className="btn bg-gradient-to-r from-green-400 to-blue-500 text-white hover:bg-blue-500 mt-4 w-full"
-      >
+        >
         {loading ? <span className="loading">loading</span> : 'Update Profile'}
       </button>
       <div className='flex w-full justify-between mt-4 '>
-        <button onClick={handleDelete} className='capitalize text-sky-500 hover:text-sky-700'>delete user</button>
-        <button className='capitalize text-sky-500 hover:text-sky-700'>log out user</button>
+        {/* <button type='button' onClick={()=>setShowModel(true)} className='capitalize text-sky-500 hover:text-sky-700'>delete user</button> */}
+      <DeleteModal onClose={handleDelete} btnText='Delete user'/>
+        <button type='button' onClick={handleSignout} className='capitalize text-sky-500 hover:text-sky-700'>log out user</button>
       </div>
 
       {/* <p className="text-red-700 text-xs">{error&&error.message}</p> */}
     </form>
+    {/* {
+      showModel&&<DeleteModal/>
+    } */}
+      </>
   )
 }
 
