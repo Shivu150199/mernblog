@@ -6,7 +6,7 @@ dotenv.config()
 
 export const varifyToken = (req, res, next) => {
   const token = req.cookies.access_token
-  console.log(token)
+  console.log('token',token)
   if (!token) return next(errorHandler(401, 'not authorized'))
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
@@ -15,6 +15,7 @@ export const varifyToken = (req, res, next) => {
     }
 
     req.user = user
+
 
     next()
   })

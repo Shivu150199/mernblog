@@ -3,9 +3,10 @@ import authReducer from './redux/authSlice'
 import {persistReducer} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import persistStore from 'redux-persist/es/persistStore'
-
+import postReducer from './redux/postSlice'
 export const rootReducer=combineReducers({
   authState:authReducer,
+  postState:postReducer
 })
 
 const persistConfig={

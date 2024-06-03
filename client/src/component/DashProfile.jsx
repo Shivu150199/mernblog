@@ -52,7 +52,7 @@ const res=await fetch('/api/auth/v1/update/'+user.data._id,{
   body:JSON.stringify(formData)
 })
  const data=await res.json()
-
+ 
  dispatch(updateSuccess(data))
  }catch(err){
   console.log(err)
