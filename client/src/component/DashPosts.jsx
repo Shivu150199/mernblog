@@ -29,15 +29,20 @@ if(res.data.posts.length<9){
       fetchPosts()
     }
   }, [user.data._id])
-  console.log(postList)
-const handleDelete=()=>{
 
+const handleDelete=async(postId)=>{
+ 
+const res=await axios.delete(`/api/post/v1/deletePost/${postId}/${user.data._id}`)
+
+if(res.status===204){
+setPostList(prev=>prev.filter(item=>item._id!==postId))
+}
 }
 const handleShowMore=async()=>{
   let startIndex=postList.length
   try{
 const res=await axios.get(`/api/post/v1/get-post?userId=${user.data._id}&startIndex=${startIndex}`)
-console.log(res)
+
 if(res.data.posts.length<9){
   setShowMore(false)
 }
@@ -93,7 +98,7 @@ if(res.statusText==='OK'){
                     <p>{item.category}</p>
                   </Table.Cell>
                   <Table.Cell>
-                   <button onClick={()=>setShowModel(true)} className='btn'><DeleteModal btnText='Delete' onClose={handleDelete}/></button>
+                   <button onClick={()=>setShowModel(true)} className='btn'><DeleteModal btnText='Delete' onClose={()=>handleDelete(item._id)}/></button>
                   </Table.Cell>
                   <Table.Cell>
                    <Link to={`/update-post/${item._id}`} className='btn'>Edit</Link>

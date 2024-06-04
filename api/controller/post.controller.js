@@ -75,12 +75,13 @@ catch(err){
 
 
 export const deletePost=async(req,res,next)=>{
-if(req.params.id!==req.user.id){
+if(!req.user.isAdmin||req.user.id!==req.params.userId){
     return next(errorHandler(404,'you are not authorised'))
 }
 
 try{
-await Post.findByIdAndDelete(req.params.id)
+await Post.findByIdAndDelete(req.params.postId)
+
 res.status(204).json({
    status:'success',
    message:'post deleted successfully'
