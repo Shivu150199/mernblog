@@ -72,3 +72,22 @@ catch(err){
     next(errorHandler(404,'api not working'))
 }
 }
+
+
+export const deletePost=async(req,res,next)=>{
+if(req.params.id!==req.user.id){
+    return next(errorHandler(404,'you are not authorised'))
+}
+
+try{
+await Post.findByIdAndDelete(req.params.id)
+res.status(204).json({
+   status:'success',
+   message:'post deleted successfully'
+})
+}catch(err){
+next(errorHandler((err)))
+}
+
+
+}
