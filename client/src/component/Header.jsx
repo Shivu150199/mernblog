@@ -26,9 +26,9 @@ const Header = () => {
     <Navbar fluid rounded>
       <Link to="/" className="flex gap-1 items-center font-bold">
         <Badge className="p-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded ">
-          MERN
+          CODE
         </Badge>{' '}
-        Blog
+        CRAFTER
       </Link>
       <form className="w-10 md:w-[15rem]">
         <TextInput

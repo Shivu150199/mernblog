@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import authSlice from "./authSlice";
+import authSlice, { updatePending, updateSuccess } from "./authSlice";
 import { toast } from "react-toastify";
 
 const initialState={
@@ -29,11 +29,27 @@ state.error=null
             state.loading=false
 toast('post not created')
 
+        },
+        updatePostPending:(state)=>{
+            state.loading=true
+            state.error=null
+
+        
+        },
+        updatePostSuccess:(state)=>{
+            state.loading=false
+            state.error=null
+toast('successfuly updated')
+        },
+        updateFailure:(state,action)=>{
+state.error=action.payload
+state.loading=false
+toast('updation failed')
         }
     }
 })
 
 
-export const {createPostFail,createPostPending,createPostSuccess}=postSlice.actions
+export const {createPostFail,createPostPending,createPostSuccess,updateFailure,updatePostPending,updatePostSuccess}=postSlice.actions
 
 export default postSlice.reducer

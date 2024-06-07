@@ -39,9 +39,9 @@ const Signin = () => {
       <div className="flex flex-col p-6 min-h-screen items-center justify-center">
         <h1 className="text-4xl font-bold mb-4 text-center">
           <span className="p-1 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded ">
-            MERN
+            CODE
           </span>{' '}
-          Blog
+          CRAFTER
         </h1>
         <p className="font-medium w-50">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui, sint.

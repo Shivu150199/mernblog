@@ -31,12 +31,20 @@ if(res.data.posts.length<9){
   }, [user.data._id])
 
 const handleDelete=async(postId)=>{
- 
-const res=await axios.delete(`/api/post/v1/deletePost/${postId}/${user.data._id}`)
 
-if(res.status===204){
-setPostList(prev=>prev.filter(item=>item._id!==postId))
-}
+  try{
+
+    const res=await axios.delete(`/api/post/v1/deletePost/${postId}/${user.data._id}`)
+    if(res.status===204){
+      setPostList(prev=>prev.filter(items=>items._id!==postId))
+      }
+  }
+  catch(err){
+    console.log(err)
+  }
+ 
+
+
 }
 const handleShowMore=async()=>{
   let startIndex=postList.length

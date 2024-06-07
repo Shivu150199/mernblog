@@ -10,18 +10,21 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import { app } from '../firebase';
-import { createPostFail, createPostPending, createPostSuccess } from '../redux/postSlice';
+import { createPostFail, createPostPending, createPostSuccess, updateFailure, updatePostSuccess ,updatePostPending} from '../redux/postSlice';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate,useParams } from 'react-router-dom';
 
-const CreatePost = () => {
+
+const UpdatePost = () => {
+    const {postId}=useParams()
     const{loading,error}=useSelector(state=>state.postState)
     const [imgFile, setImgFiles] = useState(null)
     const [fileUrl, setFileUrl] = useState(null)
     const [imageProgress, setImageProgress] = useState(0)
     const [fileUploadError, setFileUploadError] = useState(null)
     const [formData,setFormData]=useState(null)
+    const dispatch=useDispatch()
     // const [loading,setLoading]=useState(false)
     const navigate=useNavigate()
     const handleImageChange = (e) => {
@@ -36,6 +39,7 @@ const CreatePost = () => {
     //         uploadImage()
     //     }
     // }, [files])
+
 
     const uploadImage = async() => {
         try{
@@ -67,37 +71,52 @@ console.log(err)
     }
         
     }
-    console.log(formData)
-    console.log(imageProgress)
+
     const handleUpload=()=>{
         uploadImage()
     }
 const handleChange=(e)=>{
 setFormData({...formData,[e.target.id]:e.target.value})
 }
+const handleContent=()=>{
+    (value)=>setFormData({...formData,content:value})
+}
 const handleSubmit=async(e)=>{
-    console.log('hello')
+
 e.preventDefault()
+dispatch(updatePostPending())
+
 try{
-    createPostPending()
-const res=await axios.post('/api/post/v1/create',formData)
-console.log(res.data)
-createPostSuccess(res.data)
+const res=await axios.put(`/api/post/v1/update-post/${formData._id}/${formData.userId}`,formData)
+console.log('this is the response',res)
+dispatch(updatePostSuccess())
 navigate(`/post/${res.data.data.slug}`)
+
 }catch(err){
-    console.log(err)
-createPostFail(err)
+console.log(err)
+dispatch(updateFailure(err))
 }
 
-}
 
+}
+useEffect(()=>{
+    const fetchData=async()=>{
+        let res=await axios.get(`/api/post/v1/get-post?postId=${postId}`)
+        // console.log(res)
+        setFormData(res.data.posts[0])
+    }
+    fetchData()
+    
+    },[postId])
+
+    console.log(formData)
     return (
         <div className='p-3 min-h-screen max-w-3xl mx-auto gap-4'>
             <h2 className='text-center text-3xl font-bold text-slate-700 tracking-wider mb-4'>Create Post</h2>
             <form className='flex flex-col gap-4' >
                 <div className='flex flex-col md:flex-row md:justify-between gap-4 '>
-                    <TextInput type='text' placeholder='Title required' className='w-full' onChange={handleChange} id='title' />
-                    <Select onChange={handleChange} id='category'>
+                    <TextInput value={formData&&formData.title} type='text' placeholder='Title required' className='w-full' onChange={handleChange} id='title' />
+                    <Select onChange={handleChange} id='category' >
                         <option value="uncategorised">Select a category</option>
                         <option value="Javascript">Javascript</option>
                         <option value="Reactjs">React JS</option>
@@ -113,9 +132,9 @@ createPostFail(err)
                 <button className='btn btn-primary' onClick={handleUpload}>upload image</button>
 
             </div>
-            <img src={fileUrl} alt="" />
+            <img src={formData&&formData.poster} alt="" />
             <div className='mt-6'>
-                <ReactQuill theme="snow" placeholder='Write something' className='h-72 mb-4' required onChange={(value)=>setFormData({...formData,content:value})} id='content' />
+                <ReactQuill theme="snow" placeholder='Write something' className='h-72 mb-4' required onChange={handleContent} id='content' value={formData&&formData.content} />
                 <Button onClick={handleSubmit} type='submit' className='btn w-full mt-20'>{loading?<span className='spinner'>loading</span>:"Publish"}</Button>
             </div>
 
@@ -124,4 +143,4 @@ createPostFail(err)
     )
 }
 
-export default CreatePost
+export default UpdatePost

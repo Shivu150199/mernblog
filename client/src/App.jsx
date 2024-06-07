@@ -16,6 +16,7 @@ import Fotter from './component/Fotter'
 import PrivateRoute from './component/PrivateRoute'
 import CreatePost from './pages/CreatePost'
 import AdminPrivateRoute from './component/AdminPrivateRoute'
+import UpdatePost from './pages/Update'
 
 function App() {
   
@@ -35,6 +36,7 @@ function App() {
 <Route element={<AdminPrivateRoute/>}>
 
 <Route path='/create-post' element={<CreatePost/>}/>
+<Route path='/update-post/:postId' element={<UpdatePost/>}/>
 </Route>
 
         <Route path="/sign-up" element={<Singup />} />

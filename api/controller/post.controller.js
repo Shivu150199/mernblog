@@ -41,7 +41,7 @@ const posts=await Post.find({
     ...(req.query.userId&&{userId:req.query.userId}),
     ...(req.query.category&&{category:req.query.category}),
     ...(req.query.slug&&{slug:req.query.slug}),
-    ...(req.query.postId&&{postId:req.query.postId}),
+    ...(req.query.postId&&{_id:req.query.postId}),
     ...(req.query.searchTerm&&{
         $or:[
             {title:{$regex:req.query.searchTerm,$options:'i'}},
@@ -88,6 +88,59 @@ res.status(204).json({
 })
 }catch(err){
 next(errorHandler((err)))
+}
+
+
+}
+
+
+export const getSinglePost=async(req,res,next)=>{
+const postId=req.query.params
+    try{
+const singelPost=await Post.findById(postId)
+
+res.status(200).json({
+    status:'success',
+    data:singelPost[0
+        
+    ]
+})
+
+
+
+    }catch(
+err
+    ){
+        next(errorHandler(404,'not able to get this data'))
+    }
+
+}
+
+
+export const updatePost=async(req,res,next)=>{
+
+if(!req.user.isAdmin||req.user.id!==req.params.userId){
+    return next(errorHandler(403,'not allowed to do update'))
+}
+
+try{
+const updatedPost=await Post.findByIdAndUpdate(req.params.postId,{$set:{
+    title:req.body.title,
+    content:req.body.content,
+    category:req.body.category,
+    poster:req.body.poster
+
+}},{new:true})
+
+res.status(200).json({
+    status:'success',
+    data:updatedPost
+})
+
+}
+catch(error){
+next(errorHandler(404,'not able to update the post'))
+
 }
 
 
