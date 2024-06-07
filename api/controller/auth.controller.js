@@ -192,3 +192,50 @@ catch(err){
 next(errorHandler(404,'not able to signout'))
 }
 }
+
+
+
+export const getUsers=async(req,res,next)=>{
+if(!req.user.isAdmin){
+  return next(errorHandler(404,'not authorised to get list of user'))
+}
+try{
+const limit=parseInt(req.query.limit)||9
+const startIndex=parseInt(req.query.startIndex)||0
+const sortDirection =req.query.sort==='asc'?1:-1
+const users=await User.find().sort({createdAt:sortDirection}).skip(startIndex).limit(limit)
+
+const userWithoutPassword=users.map((user)=>{
+  const{password,...rest}=user._doc
+  return rest
+
+})
+
+const totalUser=await User.countDocuments()
+const now=new Date()
+const oneMonthAgo=new Date(
+  now.getDate(),
+  now.getMonth()-1,
+  now.getFullYear()
+)
+
+const lastMonthUser=await User.countDocuments({
+  createdAt:{$gte:oneMonthAgo}
+})
+
+res.status(200).json({
+  status:'success',
+  data:userWithoutPassword,
+  totalUser,
+  lastMonthUser
+})
+
+
+}
+catch(err){
+next(errorHandler(404,"not able to get list of user"))
+}
+
+
+
+}
