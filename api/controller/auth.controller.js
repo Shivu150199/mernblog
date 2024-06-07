@@ -163,7 +163,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser=async(req,res,next)=>{
 let paramId=req.params.id
 let userId=req.user.id
-if(paramId!==userId){
+if(!req.user.isAdmin&&paramId!==userId){
   return next(errorHandler('404','param id is not equal to user id that why this error is occur'))
 }
 
