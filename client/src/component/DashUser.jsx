@@ -117,7 +117,7 @@ const DashUsers = () => {
                                         <p>{item.isAdmin ? (<FaCheck className='text-green-500'/>) : <FaTimes className='text-rose-500'/>}</p>
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <button onClick={()=>handleClick(item._id)} className='btn'><DeleteModal btnText='Delete' onClose={handleDelete} /></button>
+                                        <div onClick={()=>handleClick(item._id)} className='btn'><DeleteModal btnText='Delete' onClose={handleDelete} /></div>
                                     </Table.Cell>
 
                                 </Table.Row>

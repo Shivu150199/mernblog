@@ -11,6 +11,7 @@ const DashPosts = () => {
   const { user } = useSelector(state => state.authState)
   const [postList, setPostList] = useState([])
   const [showMore,setShowMore]=useState(true)
+  const [postIdDelete,setPostIdDelete]=useState('')
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -30,13 +31,13 @@ if(res.data.posts.length<9){
     }
   }, [user.data._id])
 
-const handleDelete=async(postId)=>{
+const handleDelete=async()=>{
 
   try{
 
-    const res=await axios.delete(`/api/post/v1/deletePost/${postId}/${user.data._id}`)
+    const res=await axios.delete(`/api/post/v1/deletePost/${postIdDelete}/${user.data._id}`)
     if(res.status===204){
-      setPostList(prev=>prev.filter(items=>items._id!==postId))
+      setPostList(prev=>prev.filter(items=>items._id!==postIdDelete))
       }
   }
   catch(err){
@@ -63,6 +64,12 @@ if(res.statusText==='OK'){
     console.log(err)
   }
 }
+
+const handleClick = (id) => {
+  setPostIdDelete(id)
+  setShowModel(true)
+}
+
   return (<div>
 
     {user.data.isAdmin && postList.length > 0 ? (
@@ -106,7 +113,7 @@ if(res.statusText==='OK'){
                     <p>{item.category}</p>
                   </Table.Cell>
                   <Table.Cell>
-                   <button onClick={()=>setShowModel(true)} className='btn'><DeleteModal btnText='Delete' onClose={()=>handleDelete(item._id)}/></button>
+                   <div onClick={()=>handleClick(item._id)} className='btn'><DeleteModal btnText='Delete' onClose={handleDelete}/></div>
                   </Table.Cell>
                   <Table.Cell>
                    <Link to={`/update-post/${item._id}`} className='btn'>Edit</Link>

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { handleLogout } from '../redux/authSlice'
 const DashSidebar = () => {
   const {user}=useSelector(state=>state.authState)
-  console.log('user pist',user)
+
   const dispatch = useDispatch()
   const leChalo = useNavigate()
   const location = useLocation()

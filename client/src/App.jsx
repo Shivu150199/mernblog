@@ -17,6 +17,7 @@ import PrivateRoute from './component/PrivateRoute'
 import CreatePost from './pages/CreatePost'
 import AdminPrivateRoute from './component/AdminPrivateRoute'
 import UpdatePost from './pages/Update'
+import PostPage from './pages/PostPage'
 
 function App() {
   
@@ -42,6 +43,7 @@ function App() {
         <Route path="/sign-up" element={<Singup />} />
         <Route path="/sign-in" element={<Signin />} />
         <Route path="/project" element={<Projects />} />
+        <Route path="/post/:postSlug" element={<PostPage/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
