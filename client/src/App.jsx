@@ -18,12 +18,14 @@ import CreatePost from './pages/CreatePost'
 import AdminPrivateRoute from './component/AdminPrivateRoute'
 import UpdatePost from './pages/Update'
 import PostPage from './pages/PostPage'
+import ScrollToTop from './component/ScrollToTop'
 
 function App() {
   
 
   return (
     <BrowserRouter>
+    <ScrollToTop/>
       <ToastContainer autoClose={2000} pauseOnHover={false} />
       <Header />
       <Routes>

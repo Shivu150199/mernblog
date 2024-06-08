@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import CallToAction from '../component/CallToAction'
+import ComentSection from '../component/ComentSection'
 const PostPage = () => {
   const [post, setPost] = useState(null)
   const [error, setError] = useState(null)
@@ -56,6 +57,10 @@ const PostPage = () => {
 <div className='max-w-4xl mx-auto w-full'>
   <CallToAction/> 
 </div>
+<div className='commentSection'>
+<ComentSection postId={post&&post._id}/>
+</div>
+
     </main>
   )
 }
