@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
+import CallToAction from '../component/CallToAction'
 const PostPage = () => {
   const [post, setPost] = useState(null)
   const [error, setError] = useState(null)
@@ -52,7 +53,9 @@ const PostPage = () => {
       </Link>
 
       <div className='text-xl p-4 mx-auto w-full post-content text-wrap overflow-hidden' dangerouslySetInnerHTML={{ __html: post && post.content }}></div>
-
+<div className='max-w-4xl mx-auto w-full'>
+  <CallToAction/> 
+</div>
     </main>
   )
 }
