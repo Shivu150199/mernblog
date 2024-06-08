@@ -1,15 +1,37 @@
-import { Button, Textarea } from 'flowbite-react'
+import { Alert, Button, Textarea } from 'flowbite-react'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-
+import axios from 'axios'
 
 const ComentSection = ({postId}) => {
     const [comment,setCommnet]=useState('')
+    const[loading,setLoading]=useState(false)
+    const [error,setError]=useState(null)
     const{user}=useSelector(state=>state.authState)
-    console.log('user',user)
-    const handleSubmit=()=>{
-        
+    
+    const handleSubmit=async(e)=>{
+        e.preventDefault()
+if(comment.length>200){
+    return ;
+}
+
+try{
+    setLoading(true)
+const res=await axios.post('/api/comment/v1/create-comment',{content:comment,postId,userId:user.data._id})
+console.log('comment ',res)
+setLoading(false)
+setError(null)
+setCommnet('')
+}
+catch(err){
+    console.log(err)
+setError(err)
+setLoading(false)
+setCommnet('')
+}
+
+
     }
   return (
     <div className='w-80'>
@@ -33,11 +55,14 @@ const ComentSection = ({postId}) => {
 {
     user&&(
 <form onSubmit={handleSubmit} className='w-full p-4 rounded border border-teal-600'>
-    <Textarea placeholder='Add a comment' rows='3' maxLength='200' className='w-full' onChange={(e)=>setCommnet(e.target.value)}/>
+    <Textarea value={comment} placeholder='Add a comment' rows='3' maxLength='200' className='w-full' onChange={(e)=>setCommnet(e.target.value)}/>
     <div className='flex justify-between my-2 items-center'>
         <p className='text-xs'>{200-comment.length} characters remaining</p>
-        <Button type='submit' outline className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>Submit</Button>
+        <Button type='submit' outline className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>{loading?'loading....':'Submit'}</Button>
+
     </div>
+    {error&&<Alert className='mt-2' color={'failure'}>{error.message}</Alert>}
+    
 </form>
 
     )
