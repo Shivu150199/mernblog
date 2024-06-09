@@ -31,3 +31,23 @@ res.status(200).json({
     
 
 }
+
+
+export const getComments=async(req,res,next)=>{
+
+
+    try{
+const comments=await Comment.find({postId:req.params.postId}).sort({
+    createdAt:-1
+})
+
+res.status(200).json({
+    status:'success',
+    data:comments
+})
+    }
+    catch(err){
+        next(errorHandler(404,'not able to get all commnets'))
+    }
+
+}

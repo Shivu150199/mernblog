@@ -239,3 +239,27 @@ next(errorHandler(404,"not able to get list of user"))
 
 
 }
+
+
+export const getUserById=async(req,res,next)=>{
+
+try{
+const user=await User.findById(req.params.userId)
+if(!user){
+  return next(errorHandler('403','not able to get user'))
+}
+
+const {password,...rest}=user._doc
+
+res.status(200).json({
+  status:'success',
+  data:rest
+})
+
+
+
+}catch(err){
+  next(errorHandler(404,'not able to get user'))
+}
+
+}
