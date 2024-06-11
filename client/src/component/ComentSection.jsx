@@ -1,7 +1,7 @@
 import { Alert, Button, Textarea } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Comment from './Comment'
 
@@ -11,6 +11,7 @@ const ComentSection = ({ postId }) => {
     const [error, setError] = useState(null)
     const [commentList, setCommentList] = useState([])
     const { user } = useSelector(state => state.authState)
+    const navigate=useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -39,7 +40,7 @@ const ComentSection = ({ postId }) => {
         const getComments = async () => {
             try {
                 const res = await axios.get(`/api/comment/v1/get-comment/${postId}`)
-                console.log(res.data)
+          
                 setCommentList(res.data.data)
             } catch (err) {
                 console.log(err)
@@ -49,7 +50,31 @@ const ComentSection = ({ postId }) => {
     }, [postId])
 
 
-    console.log(commentList)
+const handleLike=async(commentId)=>{
+try{
+if(!user){
+    navigate('/sign-in')
+    return;
+}
+const {data}=await axios.put(`/api/comment/v1/like-comment/${commentId}`)
+console.log(data)
+setCommentList(commentList.map((item)=>{
+    return (item._id==commentId)?{
+        ...item,likes:data.likes,
+        numberOfLikes:data.likes.length
+    }:item
+}))
+
+
+
+}catch(err){
+    console.log(err)
+}
+
+
+}
+
+console.log(commentList)
     return (
         <div className='w-80 md:w-[30rem]'>
             {user ? (<div className='flex gap-2 my-4 items-center'>
@@ -96,7 +121,7 @@ const ComentSection = ({ postId }) => {
 
                 <div className='flex flex-col gap-4'>
                 {commentList.map((item) => {
-                    return <Comment key={item._id} comment={item} />
+                    return <Comment key={item._id} comment={item} onLike={handleLike}/>
                 })}
                     </div>
 

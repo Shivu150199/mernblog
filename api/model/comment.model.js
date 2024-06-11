@@ -1,32 +1,32 @@
 import mongoose from "mongoose";
 
-const CommentSchema=new mongoose.Schema({
-    content:{
-        type:String,
-        required:true
+const CommentSchema = new mongoose.Schema({
+    content: {
+        type: String,
+        required: true
     },
-    userId:{
-        type:String,
-        required:true
+    userId: {
+        type: String,
+        required: true
     },
-    postId:{
-        type:String,
-        required:true,
+    postId: {
+        type: String,
+        required: true,
     },
-    likes:{
-types:Array,
-default:[]
+    likes: {
+        type: Array,
+        default: []
 
     },
-    numberOfLikes:{
-        type:Number,
-        default:0
+    numberOfLikes: {
+        type: Number,
+        default: 0
     },
-  
-},  {timestamps:true})
+
+}, { timestamps: true })
 
 
 
-const Comment=mongoose.model('Comment',CommentSchema)
+const Comment = mongoose.model('Comment', CommentSchema)
 
 export default Comment
