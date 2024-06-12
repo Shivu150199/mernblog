@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { FaThumbsUp } from "react-icons/fa";
 import { useSelector } from 'react-redux';
+import { Button, Textarea } from 'flowbite-react';
 
-const Comment = ({ comment, onLike }) => {
+const Comment = ({ comment, onLike,onEdit }) => {
     const {user}=useSelector(state=>state.authState)
     const [users, setUser] = useState({})
+    const[isEditing,setIsEditing]=useState(false)
+    const[comments,setComment]=useState('')
     useEffect(() => {
         const getUser = async () => {
             try {
@@ -22,6 +25,30 @@ const Comment = ({ comment, onLike }) => {
     }, [comment])
 console.log(user.data._id)
 console.log(comment.likes)
+const handleEdit=()=>{
+setIsEditing(true)
+setComment(comment.content)
+}
+const handleSave=async()=>{
+
+try{
+const res=await axios.put(`/api/comment/v1/edit-comment/${comment._id}`,{content:comments})
+console.log(res)
+if(res.statusText=='OK'){
+setIsEditing(false)
+onEdit(comment,comments)
+}
+
+
+}catch(err){
+    console.log(err)
+}
+
+
+}
+
+console.log(comments)
+
     return (
         <div className='flex items-center gap-4 border-b-slate-200 border-b pb-2'>
             <div>
@@ -32,7 +59,16 @@ console.log(comment.likes)
                     <span className='font-bold truncate'>@{users ? users.username : 'anonymous'}</span>
                     <span className='text-slate-400 text-sm'>{moment(comment.createdAt).fromNow()}</span>
                 </div>
-                <p className='text-xl text-slate-500'>{comment.content}</p>
+                {isEditing?(<>
+               <Textarea value={comments}  placeholder='Add a comment' rows='3' maxLength='200' className='w-96' onChange={(e) => setComment(e.target.value)} />
+               <div className='flex gap-2 items-center justify-end'>
+<Button onClick={handleSave}>Save</Button>
+<Button onClick={()=>setIsEditing(false)}>Cancel</Button>
+               </div>
+                    </>
+                ):(
+                <>
+                  <p className='text-xl text-slate-500'>{comment.content}</p>
                 <div className='flex gap-2'>
                     <button onClick={() => onLike(comment._id)}><FaThumbsUp className={`text-slate-400 hover:text-blue-500 ${user&&comment.likes.includes(user.data._id)&&'!text-blue-500' }`}/></button>
                     <p className='text-slate-500 text-sm'>
@@ -40,7 +76,13 @@ console.log(comment.likes)
                             comment.numberOfLikes>0&&comment.numberOfLikes+" "+(comment.numberOfLikes===1?"like":'likes')
                         }
                     </p>
+                    {
+                        user&&((user.data._id==comment.userId)||user.isAdmin)&&<button className='text-slate-500 text-sm' onClick={handleEdit}>Edit</button>
+                    }
                 </div>
+                </>
+                )}
+              
             </div>
 
 

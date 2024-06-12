@@ -75,6 +75,14 @@ setCommentList(commentList.map((item)=>{
 }
 
 console.log(commentList)
+
+const handleCommentEdit=(commentss,editedComment)=>{
+setCommentList(commentList.map((c)=>{
+    return c._id==commentss._id?{...c,content:editedComment}:c
+}))
+}
+
+
     return (
         <div className='w-80 md:w-[30rem]'>
             {user ? (<div className='flex gap-2 my-4 items-center'>
@@ -121,7 +129,7 @@ console.log(commentList)
 
                 <div className='flex flex-col gap-4'>
                 {commentList.map((item) => {
-                    return <Comment key={item._id} comment={item} onLike={handleLike}/>
+                    return <Comment onEdit={handleCommentEdit} key={item._id} comment={item} onLike={handleLike}/>
                 })}
                     </div>
 
