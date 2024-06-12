@@ -4,8 +4,9 @@ import moment from 'moment'
 import { FaThumbsUp } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
+import DeleteModal from './DeleteModal';
 
-const Comment = ({ comment, onLike,onEdit }) => {
+const Comment = ({ comment, onLike,onEdit,onDelete,handleCommentDelete }) => {
     const {user}=useSelector(state=>state.authState)
     const [users, setUser] = useState({})
     const[isEditing,setIsEditing]=useState(false)
@@ -29,6 +30,10 @@ const handleEdit=()=>{
 setIsEditing(true)
 setComment(comment.content)
 }
+// const handleDelete=()=>{
+
+// }
+
 const handleSave=async()=>{
 
 try{
@@ -78,6 +83,9 @@ console.log(comments)
                     </p>
                     {
                         user&&((user.data._id==comment.userId)||user.isAdmin)&&<button className='text-slate-500 text-sm' onClick={handleEdit}>Edit</button>
+                    }
+                    {
+                        user&&((user.data._id==comment.userId)||user.isAdmin)&&<div className='text-slate-500 text-sm' onClick={()=>onDelete(comment._id)}><DeleteModal btnText='Delete' onClose={()=>handleCommentDelete()}/></div>
                     }
                 </div>
                 </>

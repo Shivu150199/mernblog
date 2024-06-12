@@ -7,6 +7,8 @@ import Comment from './Comment'
 
 const ComentSection = ({ postId }) => {
     const [comment, setCommnet] = useState('')
+    const [showModel,setShowModel]=useState(false)
+    const [commentToDelete,setCommentToDelete]=useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [commentList, setCommentList] = useState([])
@@ -81,7 +83,25 @@ setCommentList(commentList.map((c)=>{
     return c._id==commentss._id?{...c,content:editedComment}:c
 }))
 }
+const handleCommentDelete=async()=>{
+    console.log('hello')
+try{
+const res=await axios.delete(`/api/comment/v1/delete-comment/${commentToDelete}`)
+console.log(res)
+if(res.status==200){
+  
+   
+            setCommentList(commentList.filter((item)=>item._id!==commentToDelete))
+    
 
+}
+
+
+}catch(err){
+    console.log(err)
+}
+
+}
 
     return (
         <div className='w-80 md:w-[30rem]'>
@@ -129,7 +149,10 @@ setCommentList(commentList.map((c)=>{
 
                 <div className='flex flex-col gap-4'>
                 {commentList.map((item) => {
-                    return <Comment onEdit={handleCommentEdit} key={item._id} comment={item} onLike={handleLike}/>
+                    return <Comment handleCommentDelete={handleCommentDelete} onDelete={(commentId)=>{
+                        setShowModel(true)
+                        setCommentToDelete(commentId)
+                    }} onEdit={handleCommentEdit} key={item._id} comment={item} onLike={handleLike}/>
                 })}
                     </div>
 
