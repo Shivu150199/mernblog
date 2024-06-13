@@ -31,7 +31,7 @@ const fetchPosts=async()=>{
 try{
     setLoading(true)
     const {data}=await axios.get(`/api/post/v1/get-post?${searchQuery}`)
-    console.log(data)
+  
     setPost(data.posts)
     if(data.post.length>9){
         setShowMore(true)
@@ -49,7 +49,7 @@ setError(err)
 fetchPosts()
 
     }, [path.search])
-    console.log(sidebarData)
+  
 const handleChange=(e)=>{
     if(e.target.id=='searchTerm'){
         setSidebarData({...sidebarData,searchTerm:e.target.value})
@@ -70,7 +70,7 @@ urlParams.set('category',sidebarData.category)
 let searchQuery=urlParams.toString()
 navigate(`/search?${searchQuery}`)
 }
-console.log(post)
+
     return (
         <div className='flex flex-col md:flex-row'>
             <div className='p-7 border-b border-slate-500 md:border-r md:border-slate-500 min-h-screen md:w-30 lg:w-30'>

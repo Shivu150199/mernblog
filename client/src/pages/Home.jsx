@@ -10,7 +10,7 @@ const [post,setPost]=useState([])
 useEffect(()=>{
 const fetchPost=async()=>{
 const {data}=await axios.get(`/api/post/v1/get-post`)
-console.log(data)
+
 setPost(data.posts)
 
 }

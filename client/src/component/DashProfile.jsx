@@ -55,7 +55,7 @@ const res=await fetch('/api/auth/v1/update/'+user.data._id,{
  
  dispatch(updateSuccess(data))
  }catch(err){
-  console.log(err)
+  
   dispatch(updateRejected(err))
  }  
 
@@ -119,25 +119,24 @@ const res=await fetch('/api/auth/v1/update/'+user.data._id,{
       }
     )
   }
-  console.log(user)
-  console.log(formData)
+
   const handleDelete=async(e)=>{
 e.preventDefault()
 dispatch(deleteUserPending())
     try{
       const res=await axios.delete('/api/auth/v1/delete/'+user.data._id)
-      console.log(res)
+  
       dispatch(deleteUserSuccess())
       navigate('/sing-in')
 
     }catch(err){
-console.log(err)
+
 dispatch(deleteUserRejected(err))
     }
 
 
   }
-  console.log(showModel)
+
   const handleSignout=()=>{
     dispatch(handleLogout())
   }
@@ -215,11 +214,9 @@ dispatch(deleteUserRejected(err))
         <button type='button' onClick={handleSignout} className='capitalize text-sky-500 hover:text-sky-700'>log out user</button>
       </div>
 
-      {/* <p className="text-red-700 text-xs">{error&&error.message}</p> */}
+     
     </form>
-    {/* {
-      showModel&&<DeleteModal/>
-    } */}
+  
       </>
   )
 }

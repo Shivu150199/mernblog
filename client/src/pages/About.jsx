@@ -3,9 +3,9 @@ import React from 'react'
 const About = () => {
   return (<div className="bg-gradient-to-r from-primary to-secondary min-h-screen flex items-center justify-center p-6">
       <div className="container mx-auto p-8 bg-white shadow-xl rounded-lg transform transition duration-500 hover:scale-105">
-        <h1 className="text-5xl font-bold mb-6 text-center text-primary">About Us</h1>
+        <h1 className="text-5xl font-bold mb-6 text-center text-blue-500">About Us</h1>
         <p className="text-gray-700 mb-8 text-center">
-          Welcome to <span className="text-secondary font-semibold">[Your Blog Name]</span>!
+          Welcome to <span className="text-secondary font-semibold">Code Crafter</span>!
         </p>
         <div className="space-y-12">
           <section className="flex flex-col md:flex-row items-center">
@@ -27,7 +27,7 @@ const About = () => {
             <div>
               <h2 className="text-3xl font-semibold mb-3 text-accent">Who We Are</h2>
               <p className="text-gray-600">
-                <span className="text-secondary font-semibold">Welcome Code Creafter's</span> was founded by <span className="text-secondary font-semibold">[Your Name or Founder's Name]</span>, a passionate developer with a vision to create a hub for developers to come together and share their expertise.
+                <span className="text-secondary font-semibold">Welcome Code Creafter's</span> was founded by <span className="text-secondary font-semibold">Shivam singh gautam</span>, a passionate developer with a vision to create a hub for developers to come together and share their expertise.
               </p>
             </div>
           </section>
@@ -48,9 +48,7 @@ const About = () => {
             <p className="text-gray-600 mb-4">
               We invite you to be a part of our community. Whether you’re here to read the latest articles, share your own knowledge, or connect with fellow developers, we’re glad to have you with us.
             </p>
-            <a href="/submission-guidelines" className="text-primary hover:underline font-semibold">
-              Check out our submission guidelines
-            </a>
+      
           </section>
         </div>
       </div>
