@@ -1,5 +1,5 @@
-import { Avatar, Dropdown, Navbar, NavbarLink, TextInput } from 'flowbite-react'
-import React from 'react'
+import {  Navbar, NavbarLink, TextInput } from 'flowbite-react'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Badge } from 'flowbite-react'
 import { CiSearch} from 'react-icons/ci'
@@ -12,16 +12,35 @@ const Header = () => {
   const leChalo=useNavigate()
   const dispatch=useDispatch()
   const {user}=useSelector(state=>state.authState)
-  // const h=useSelector(state=>state.authState)
-  // console.log(user.data.photo)
-  // console.log(h)
+  const [searchTerm,setSearchTerm]=useState('')
+
   const logout=async()=>{
     let res=await axios.post('/api/auth/v1/signout')
-    console.log(res)
+
       dispatch(handleLogout())
       leChalo('/sign-in')
   }
   const path=useLocation()
+  useEffect(()=>{
+    const urlParams=new URLSearchParams(path.search)
+    const searchTermFromURL=urlParams.get('searchTerm')
+    if(searchTermFromURL){
+
+      setSearchTerm(searchTermFromURL)
+    }
+
+  },[path.search])
+
+
+const handleSubmit=(e)=>{
+e.preventDefault()
+const urlParams=new URLSearchParams(path.search)
+urlParams.set('searchTerm',searchTerm)
+const searchQuery=urlParams.toString();
+leChalo(`/search?${searchQuery}`)
+
+
+}
   return (
     <Navbar fluid rounded>
       <Link to="/" className="flex gap-1 items-center font-bold">
@@ -30,18 +49,18 @@ const Header = () => {
         </Badge>{' '}
         CRAFTER
       </Link>
-      <form className="w-10 md:w-[15rem]">
+      <form onSubmit={handleSubmit} className="w-10 md:w-[15rem]">
         <TextInput
           type="text"
           placeholder="search... "
           rightIcon={CiSearch}
-          // rightIcon={<CiSearch />}
+          value={searchTerm}
+          onChange={(e)=>setSearchTerm(e.target.value)}
+         
         />
       </form>
       <Navbar.Collapse>
-        {/* <Link to="/" >Home</Link>
-       
-      */}
+   
 
         <Navbar.Link active={path === '/'} as={'div'}>
           <Link to="/">Home</Link>
@@ -101,9 +120,7 @@ const Header = () => {
         <div className="flex md:order-2">
           <Navbar.Toggle />
         </div>
-        {/*  */}
-
-        {/*  */}
+      
       </div>
     </Navbar>
   )

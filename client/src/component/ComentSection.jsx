@@ -49,7 +49,7 @@ const ComentSection = ({ postId }) => {
             }
         }
         getComments()
-    }, [postId])
+    }, [postId,loading])
 
 
 const handleLike=async(commentId)=>{

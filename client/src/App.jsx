@@ -19,6 +19,7 @@ import AdminPrivateRoute from './component/AdminPrivateRoute'
 import UpdatePost from './pages/Update'
 import PostPage from './pages/PostPage'
 import ScrollToTop from './component/ScrollToTop'
+import Search from './pages/Search'
 
 function App() {
   
@@ -31,6 +32,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/search" element={<Search />} />
+
         <Route element={<PrivateRoute/>}>
 
         <Route path="/dashboard" element={<Dashboard />} />

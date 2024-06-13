@@ -3,19 +3,22 @@ import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import CallToAction from '../component/CallToAction'
 import ComentSection from '../component/ComentSection'
+import NoitemFound from '../component/NoitemFound'
+import PostCard from '../component/PostCard'
 const PostPage = () => {
   const [post, setPost] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [recentPost,setRecentPost]=useState(null)
   const { postSlug } = useParams()
-  console.log(postSlug)
+ 
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         setLoading(true)
         const res = await axios.get(`/api/post/v1/get-post?slug=${postSlug}`)
-        console.log(res.data)
+    
         setPost(res.data.posts[0])
         setLoading(false)
         setError(null)
@@ -23,23 +26,34 @@ const PostPage = () => {
       catch (err) {
         setError(err)
         setLoading(false)
-        console.log(err)
+  
       }
 
 
 
     }
     fetchPost()
+    const fetchRecentPost=async()=>{
+      try{
+  const{data}=await axios.get(`/api/post/v1/get-post?limit=3`)
+
+  setRecentPost(data.posts)
+      }catch(err){
+  console.log(err)
+      }
+    }
+  fetchRecentPost()
 
   }, [postSlug])
 
-  console.log(post)
+
   if (loading) {
     return <h1 className='text-5xl'>loading.....</h1>
   }
+  
 
 
-  return (
+  return (<>
     <main className='flex flex-col items-center max-w-6xl p-6 mx-auto'>
       <h1 className='text-5xl my-6 capitalize font-bold text-center tracking-wider'>{post && post.title}</h1>
       <img src={post && post.poster} alt="" className='my-4 max-h-60 w-full object-cover' />
@@ -62,6 +76,25 @@ const PostPage = () => {
 </div>
 
     </main>
+
+
+    <div className='flex flex-col justify-center items-center my-6'>
+  <h1 className='font-medium text-xl'>Recent Articles</h1>
+  <div className='grid gap-4 mt-8 md:grid-cols-2 lg:grid-cols-3'>
+
+{recentPost&&recentPost.length>0?(
+  recentPost.map((item)=>{
+    return <PostCard key={item._id} post={item}/>
+    })
+    ):(
+   <NoitemFound/>
+)}
+</div>
+
+</div>
+</>
+
+
   )
 }
 
