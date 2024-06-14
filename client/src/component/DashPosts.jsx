@@ -113,7 +113,7 @@ const handleClick = (id) => {
                     <p>{item.category}</p>
                   </Table.Cell>
                   <Table.Cell>
-                   <div onClick={()=>handleClick(item._id)} className='btn'><DeleteModal btnText='Delete' onClose={handleDelete}/></div>
+                   <div onClick={()=>handleClick(item._id)} className='btn'><DeleteModal btnText='Delete' onClose={handleDelete} heading='Post'/></div>
                   </Table.Cell>
                   <Table.Cell>
                    <Link to={`/update-post/${item._id}`} className='btn'>Edit</Link>

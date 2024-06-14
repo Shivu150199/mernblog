@@ -44,7 +44,7 @@ leChalo(`/search?${searchQuery}`)
   return (
     <Navbar fluid rounded>
       <Link to="/" className="flex gap-1 items-center font-bold">
-        <Badge className="p-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded ">
+        <Badge className="p-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded text-xl">
           CODE
         </Badge>{' '}
         CRAFTER
@@ -96,14 +96,12 @@ leChalo(`/search?${searchQuery}`)
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">
+                <Link to='/dashboard?tab=profile' className="justify-between">
                   Profile
                   <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
-              <li>
-                <a>Settings</a>
-              </li>
+         
               <li onClick={logout}>
             <button>Logout</button>
               </li>

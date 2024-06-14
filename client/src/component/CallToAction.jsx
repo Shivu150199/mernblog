@@ -8,8 +8,28 @@ const CallToAction = () => {
 <p className='tracking-wide text-center capitalize mb-3'>check out my Instagram profile</p>
 <button className='btn w-full bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-tr-2xl rounded-bl-2xl mb-3 '>Follow me on Instagram</button>
 </div>
-<div className='p-2 '>
-    <img className="rounded-tr-2xl rounded-bl-2xl max-h-80 w-full object-cover" src="https://gtecvirtualuniversity.com/wp-content/uploads/2020/05/javascript.jpg" alt="" />
+<div className="carousel rounded-box w-96">
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg" className="w-full" />
+  </div> 
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg" className="w-full" />
+  </div> 
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg" className="w-full" />
+  </div> 
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.jpg" className="w-full" />
+  </div> 
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg" className="w-full" />
+  </div> 
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg" className="w-full" />
+  </div> 
+  <div className="carousel-item w-1/2">
+    <img src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg" className="w-full" />
+  </div>
 </div>
 
     </div>

@@ -12,9 +12,6 @@ export const signup = async (req, res, next) => {
       email === '',
       password === '')
     ) {
-      // return res.status(403).send({
-      //     status: 'Forbidden',
-      //     message:'kis bat ki jaldi hai sari requirement fill karo'})
     return  next(errorHandler(403, 'kis bat ki jaldi hai sari requirement fill karo'))
     }
     const pass = bcryptjs.hashSync(password, 10)
@@ -127,9 +124,6 @@ export const updateUser = async (req, res, next) => {
     if (req.body.username !== req.body.username.toLowerCase()) {
       return next(errorHandler(403, 'username should be in lowercase'))
     }
-    // if (req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-    //   return next(errorHandler(403, 'usernaem can not contains special characters'))
-    // }
   }
 
   try {

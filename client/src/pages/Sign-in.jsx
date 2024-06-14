@@ -35,19 +35,19 @@ const Signin = () => {
     })
   }
   return (
-    <section className="flex flex-col md:flex-row gap-4 items-center justify-center">
-      <div className="flex flex-col p-6 min-h-screen items-center justify-center">
+    <section className="grid md:grid-cols-2 flex-col md:flex-row gap-4 items-center justify-center">
+      <div className="flex flex-col p-6 min-h-screen justify-center">
         <h1 className="text-4xl font-bold mb-4 text-center">
           <span className="p-1 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded ">
             CODE
           </span>{' '}
           CRAFTER
         </h1>
-        <p className="font-medium w-50">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui, sint.
+        <p className="font-medium w-50 text-center text-slate-500 mt-6">
+        Welcome Code Creafter's was founded by Shivam singh gautam, a passionate developer with a vision to create a hub for developers to come together and share their expertise.
         </p>
       </div>
-      <div className="flex-1  flex items-center justify-center flex-col">
+      <div className="flex-1  flex items-center justify-center flex-col mb-6">
         <form
           className="shadow p-4 rounded flex items-center justify-center flex-col w-80"
           onSubmit={handleSubmit}

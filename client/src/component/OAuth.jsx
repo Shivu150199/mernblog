@@ -25,15 +25,15 @@ let res = await axios.post('http://localhost:3000/api/auth/v1/googleauth', {
 })
 console.log(res.data)
 dispatch(signInSuccess(res.data))
-navigate('/dashboard')
+navigate('/dashboard?tab=profile')
 }catch(error){
-  dispatch(signInRejected(err))
+  dispatch(signInRejected(error))
 console.log(error)
 }
 }
   return (
     <div className='flex w-full mt-5'>
-      <button onClick={handleGoogle} className="bg-gradient-to-r from-red-700 via-slate-400 to-slate-300 btn w-full">
+      <button onClick={handleGoogle} className="capitalize bg-gradient-to-r from-red-700 via-slate-400 to-slate-300 btn w-full">
      {loading?'loading....':'google sign in'}
       </button>
     </div>

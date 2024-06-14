@@ -1,4 +1,4 @@
-import { Label, TextInput, Toast } from 'flowbite-react'
+import { Alert, Label, TextInput, Toast } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -9,7 +9,7 @@ import {
 } from 'firebase/storage'
 import axios from 'axios'
 import { app } from '../firebase'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import {Link, useNavigate} from 'react-router-dom'
 import {
   
@@ -23,9 +23,10 @@ import {
 } from '../redux/authSlice'
 import DeleteModal from './DeleteModal'
 
+
 const DashProfile = () => {
-  const { user, loading, error } = useSelector((state) => state.authState)
-  // console.log(user)
+  const { user, loading } = useSelector((state) => state.authState)
+
   const fileRef = useRef()
   const [showModel,setShowModel]=useState(false)
 const navigate=useNavigate()
@@ -34,9 +35,10 @@ const navigate=useNavigate()
   const [imageProgress, setImageProgress] = useState(0)
   const [fileUploadError, setFileUploadError] = useState(null)
   const [formData, setFormData] = useState(null)
+  const [error,setError]=useState(null)
 
   const dispatch = useDispatch()
-  // console.log(user)
+
   
 
   const handleSubmit=async(e)=>{
@@ -44,19 +46,16 @@ e.preventDefault()
 
  try{
   dispatch(updatePending())
-const res=await fetch('/api/auth/v1/update/'+user.data._id,{
-  method:'PUT',
-  headers:{
-    'Content-Type':'application/json',
-  },
-  body:JSON.stringify(formData)
-})
- const data=await res.json()
- 
- dispatch(updateSuccess(data))
+  setError(null)
+const res=await axios.put('/api/auth/v1/update/'+user.data._id,formData)
+
+
+ dispatch(updateSuccess(res.data))
+ setError(null)
  }catch(err){
   
   dispatch(updateRejected(err))
+  setError(err)
  }  
 
 
@@ -140,10 +139,15 @@ dispatch(deleteUserRejected(err))
   const handleSignout=()=>{
     dispatch(handleLogout())
   }
+ 
+
   return (
     <>
-    <form
-      className="shadow p-4 rounded flex items-center justify-center flex-col w-80"
+    <div  className="shadow p-4 rounded flex items-center justify-center flex-col w-80">
+
+  
+    <form className='w-full'
+     
       onSubmit={handleSubmit}
       >
       <h1 className="bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text text-xl font-bold text-center">
@@ -208,15 +212,21 @@ dispatch(deleteUserRejected(err))
           </Link>
         )
       }
-      <div className='flex w-full justify-between mt-4 '>
-        {/* <button type='button' onClick={()=>setShowModel(true)} className='capitalize text-sky-500 hover:text-sky-700'>delete user</button> */}
-      <DeleteModal onClose={handleDelete} btnText='Delete user'/>
-        <button type='button' onClick={handleSignout} className='capitalize text-sky-500 hover:text-sky-700'>log out user</button>
-      </div>
+{
+  error&&<Alert className='mt-2 w-full bg-rose-200'>{error.response.data.message}</Alert>
+}
+
+
 
      
     </form>
   
+    <div className='flex w-full justify-between mt-4 '>
+        {/* <button type='button' onClick={()=>setShowModel(true)} className='capitalize text-sky-500 hover:text-sky-700'>delete user</button> */}
+      <DeleteModal onClose={handleDelete} btnText='Delete user' heading='user account'/>
+        <button type='button' onClick={handleSignout} className='capitalize text-sky-500 hover:text-sky-700'>log out user</button>
+      </div>
+      </div>
       </>
   )
 }

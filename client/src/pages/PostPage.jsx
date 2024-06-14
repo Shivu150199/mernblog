@@ -55,8 +55,8 @@ const PostPage = () => {
 
   return (<>
     <main className='flex flex-col items-center max-w-6xl p-6 mx-auto'>
-      <h1 className='text-5xl my-6 capitalize font-bold text-center tracking-wider'>{post && post.title}</h1>
-      <img src={post && post.poster} alt="" className='my-4 max-h-60 w-full object-cover' />
+      <h1 className='text-5xl my-6 capitalize font-bold text-center tracking-wider bg-gradient-to-r from-green-400 to-blue-500 text-transparent bg-clip-text'>{post && post.title}</h1>
+      <img src={post && post.poster} alt="" className='my-4 max-h-60 w-full object-cover rounded-lg shadow-lg' />
       <div className='flex justify-between w-full items-center  py-4 border-b border-slate-500'>
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span>{post && (post.content.length / 1000).toFixed(0)} mins read</span>

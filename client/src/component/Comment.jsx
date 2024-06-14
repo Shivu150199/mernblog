@@ -85,7 +85,7 @@ console.log(comments)
                         user&&((user.data._id==comment.userId)||user.isAdmin)&&<button className='text-slate-500 text-sm' onClick={handleEdit}>Edit</button>
                     }
                     {
-                        user&&((user.data._id==comment.userId)||user.isAdmin)&&<div className='text-slate-500 text-sm' onClick={()=>onDelete(comment._id)}><DeleteModal btnText='Delete' onClose={()=>handleCommentDelete()}/></div>
+                        user&&((user.data._id==comment.userId)||user.isAdmin)&&<div className='text-slate-500 text-sm' onClick={()=>onDelete(comment._id)}><DeleteModal heading='comment' btnText='Delete' onClose={()=>handleCommentDelete()}/></div>
                     }
                 </div>
                 </>
