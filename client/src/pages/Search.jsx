@@ -90,10 +90,14 @@ navigate(`/search?${searchQuery}`)
                     <div className='flex items-center gap-2'>
                         <label className='whitespace-nowrap font-semibold'>Category :</label>
                         <Select className='w-full' id='category' value={sidebarData.category} onChange={handleChange}>
-                            <option value="uncategorised">Uncategorised</option>
-                            <option value="reactjs">React js</option>
-                            <option value="nextjs">Next js</option>
-                            <option value="javascript">Javascript</option>
+                        <option value="uncategorised">Select a category</option>
+                        <option value="javascript">Javascript</option>
+                        <option value="c++">c++</option>
+                        <option value="python">Python</option>
+                        <option value="html">Html</option>
+                        <option value="css">Css</option>
+                        <option value="reactjs">React JS</option>
+                        <option value="typeScript">TypeScript</option>
 
                         </Select>
                     </div>

@@ -99,9 +99,13 @@ createPostFail(err)
                     <TextInput type='text' placeholder='Title required' className='w-full' onChange={handleChange} id='title' />
                     <Select onChange={handleChange} id='category'>
                         <option value="uncategorised">Select a category</option>
-                        <option value="Javascript">Javascript</option>
-                        <option value="Reactjs">React JS</option>
-                        <option value="TypeScript">TypeScript</option>
+                        <option value="javascript">Javascript</option>
+                        <option value="c++">c++</option>
+                        <option value="python">Python</option>
+                        <option value="html">Html</option>
+                        <option value="css">Css</option>
+                        <option value="reactjs">React JS</option>
+                        <option value="typeScript">TypeScript</option>
                     </Select>
 
                 </div>
