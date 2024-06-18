@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 const PostCard = ({post}) => {
   
   return (
-    <Link to={`/post/${post.slug}`} className="card w-96 bg-base-100 shadow-xl transition-all hover:translate-y-2">
-    <figure><img src={post.poster} alt="Shoes" /></figure>
+    <Link to={`/post/${post.slug}`} className="card w-96 h-[20rem] bg-base-100 shadow-xl transition-all hover:translate-y-2">
+    <figure><img className='w-full h-36 object-cover' src={post.poster} alt="Shoes" /></figure>
     <div className="card-body">
       <h2 className="card-title capitalize">
        {post.title}

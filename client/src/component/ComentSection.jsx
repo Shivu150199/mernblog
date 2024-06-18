@@ -24,13 +24,13 @@ const ComentSection = ({ postId }) => {
         try {
             setLoading(true)
             const res = await axios.post('/api/comment/v1/create-comment', { content: comment, postId, userId: user.data._id })
-            console.log('comment ', res)
+          
             setLoading(false)
             setError(null)
             setCommnet('')
         }
         catch (err) {
-            console.log(err)
+         
             setError(err)
             setLoading(false)
             setCommnet('')
@@ -59,7 +59,7 @@ if(!user){
     return;
 }
 const {data}=await axios.put(`/api/comment/v1/like-comment/${commentId}`)
-console.log(data)
+
 setCommentList(commentList.map((item)=>{
     return (item._id==commentId)?{
         ...item,likes:data.likes,
@@ -76,7 +76,7 @@ setCommentList(commentList.map((item)=>{
 
 }
 
-console.log(commentList)
+
 
 const handleCommentEdit=(commentss,editedComment)=>{
 setCommentList(commentList.map((c)=>{
@@ -84,10 +84,10 @@ setCommentList(commentList.map((c)=>{
 }))
 }
 const handleCommentDelete=async()=>{
-    console.log('hello')
+    
 try{
 const res=await axios.delete(`/api/comment/v1/delete-comment/${commentToDelete}`)
-console.log(res)
+
 if(res.status==200){
   
    

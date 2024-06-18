@@ -81,7 +81,7 @@ const Signin = () => {
           >
             {loading ? <span className="loading">loading</span> : 'Sign In'}
           </button>
-            <OAuth/>
+            {/* <OAuth/> */}
           {/* <p className="text-red-700 text-xs">{error&&error.message}</p> */}
           <div className="mt-4">
             <span>Do not have an account ?</span>

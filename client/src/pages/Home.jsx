@@ -3,6 +3,7 @@ import CallToAction from '../component/CallToAction'
 import axios from 'axios'
 import PostCard from '../component/PostCard'
 import NoitemFound from '../component/NoitemFound'
+import { Link } from 'react-router-dom'
 const codingImages = [
   "https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg",
   "https://images.pexels.com/photos/936137/pexels-photo-936137.jpeg",
@@ -45,7 +46,7 @@ fetchPost()
     <div>
       <h1 className="text-5xl font-bold">Welcome Code Crafter's</h1>
       <p className="py-6">Welcome Code Creafter's was founded by Shivam singh gautam, a passionate developer with a vision to create a hub for developers to come together and share their expertise..</p>
-      <button className="btn text-white bg-gradient-to-r from-green-400 to-blue-500">Explore</button>
+      <a href='https://zippy-melba-10ec8a.netlify.app/' className="btn text-white bg-gradient-to-r from-green-400 to-blue-500">Explore</a>
     </div>
   </div>
 </div>

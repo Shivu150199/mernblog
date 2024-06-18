@@ -71,6 +71,9 @@ leChalo(`/search?${searchQuery}`)
         <Navbar.Link active={path === '/about'} as={'div'}>
           <Link to="/about">About</Link>
         </Navbar.Link>
+    
+          <a href="https://zippy-melba-10ec8a.netlify.app/">Latest News</a>
+       
       </Navbar.Collapse>
       <div className="flex items-center gap-2">
         <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold  py-2 px-4 border rounded hover:shadow-xl hover:scale-105 transition-all">

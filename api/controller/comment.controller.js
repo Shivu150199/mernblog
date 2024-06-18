@@ -7,7 +7,7 @@ export const createComment = async (req, res, next) => {
         const { content, userId, postId } = req.body
 
         if (userId !== req.user.id) {
-            return next(errorHandler('403', 'you are not authorised to create this'))
+            return next(errorHandler('404', 'you are not authorised to create this'))
         }
 
         const newPost = new Comment({

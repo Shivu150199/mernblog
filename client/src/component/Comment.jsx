@@ -15,7 +15,7 @@ const Comment = ({ comment, onLike,onEdit,onDelete,handleCommentDelete }) => {
         const getUser = async () => {
             try {
                 const res = await axios.get(`/api/auth/v1/${comment.userId}`)
-                console.log(res.data)
+            
                 setUser(res.data.data)
             } catch (err) {
                 console.log(err)
@@ -24,8 +24,7 @@ const Comment = ({ comment, onLike,onEdit,onDelete,handleCommentDelete }) => {
         getUser()
 
     }, [comment])
-console.log(user.data._id)
-console.log(comment.likes)
+
 const handleEdit=()=>{
 setIsEditing(true)
 setComment(comment.content)
@@ -52,7 +51,7 @@ onEdit(comment,comments)
 
 }
 
-console.log(comments)
+
 
     return (
         <div className='flex items-center gap-4 border-b-slate-200 border-b pb-2'>

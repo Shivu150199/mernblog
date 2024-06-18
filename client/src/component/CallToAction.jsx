@@ -6,7 +6,7 @@ const CallToAction = () => {
 <div>
 <h2 className='text-xl font-medium text-center mb-4'>Want to learn more about javascript and want to watch funny meme?</h2>
 <p className='tracking-wide text-center capitalize mb-3'>check out my Instagram profile</p>
-<button className='btn w-full bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-tr-2xl rounded-bl-2xl mb-3 '>Follow me on Instagram</button>
+<a target='_blank' href='https://www.instagram.com/gautamshivamsingh' className='btn w-full bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-tr-2xl rounded-bl-2xl mb-3 '>Follow me on Instagram</a>
 </div>
 <div className="carousel rounded-box w-96">
   <div className="carousel-item w-1/2">

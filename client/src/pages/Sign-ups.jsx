@@ -105,7 +105,7 @@ console.log(formData)
           >
             {loading ? <span className="loading">loading</span> : 'Sign Up'}
           </button>
-          <OAuth />
+          {/* <OAuth /> */}
           <p className="text-red-700 text-xs">{errorMessage}</p>
           <div className="mt-4">
             <span>have an account ?</span>
