@@ -1,4 +1,4 @@
-import { Alert, Label, TextInput, Toast } from 'flowbite-react'
+import { Alert, Label, ListGroup, TextInput, Toast } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -17,15 +17,19 @@ import {
   deleteUserRejected,
   deleteUserSuccess,
   handleLogout,
-  updatePending,
-  updateRejected,
-  updateSuccess,
+
+  updateUser,
 } from '../redux/authSlice'
 import DeleteModal from './DeleteModal'
 
 
+
+
+
 const DashProfile = () => {
-  const { user, loading } = useSelector((state) => state.authState)
+  // const userCookie=Cookies.get('hello')
+  const { user, loading ,error} = useSelector((state) => state.authState)
+console.log(user)
 
   const fileRef = useRef()
   const [showModel,setShowModel]=useState(false)
@@ -35,33 +39,40 @@ const navigate=useNavigate()
   const [imageProgress, setImageProgress] = useState(0)
   const [fileUploadError, setFileUploadError] = useState(null)
   const [formData, setFormData] = useState(null)
-  const [error,setError]=useState(null)
+  // const [error,setError]=useState(null)
 
   const dispatch = useDispatch()
 
   
 
-  const handleSubmit=async(e)=>{
-e.preventDefault()
-
- try{
-  dispatch(updatePending())
-  setError(null)
-const res=await axios.put('/api/auth/v1/update/'+user.data._id,formData)
+//   const handleSubmit=async(e)=>{
+// e.preventDefault()
 
 
- dispatch(updateSuccess(res.data))
- setError(null)
- }catch(err){
-  
-  dispatch(updateRejected(err))
-  setError(err)
- }  
+//  try{
+//   dispatch(updatePending())
+//   // setError(null)
+// const res=await axios.put('http://localhost:3000/api/auth/v1/update/'+user.data._id,formData)
+// console.log(res)
+
+//  dispatch(updateSuccess(res.data))
+// //  setError(null)
+//  }catch(err){
+//   console.log(err)
+//   dispatch(updateRejected(err))
+//   // setError(err)
+//  }  
 
 
 
-  }
-  
+//   }
+const userId=user.data._id
+const handleSubmit=async(e)=>{
+  e.preventDefault()
+  dispatch(updateUser({userId,formData}))
+}  
+
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value })
   }
@@ -139,7 +150,7 @@ dispatch(deleteUserRejected(err))
   const handleSignout=()=>{
     dispatch(handleLogout())
   }
- 
+//  console.log(formData)
 
   return (
     <>
@@ -213,7 +224,7 @@ dispatch(deleteUserRejected(err))
         )
       }
 {
-  error&&<Alert className='mt-2 w-full bg-rose-200'>{error.response.data.message}</Alert>
+  // error&&<Alert className='mt-2 w-full bg-rose-200'>{error.response.data.message}</Alert>
 }
 
 

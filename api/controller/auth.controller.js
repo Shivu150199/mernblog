@@ -2,70 +2,93 @@ import User from '../model/auth.model.js'
 import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/error.js'
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-dotenv.config()
-export const signup = async (req, res, next) => {
+export const signup = async (req, res) => {
+  const { username, password, email } = req.body
+
+
+
+  if ((!username || !password || !email )|| username== ''||email === ''||password === '') {
+  // return  next(errorHandler(403, 'kis bat ki jaldi hai sari requirement fill karo'))
+
+  return res.send({
+    status:403,
+    message:'kis bat ki jaldi ahi tum sabko  sari requirement fill karo',
+  })
+  }
   try {
-    const { username, password, email } = req.body
-    if (
-      (!username || !password || !email || username === '',
-      email === '',
-      password === '')
-    ) {
-    return  next(errorHandler(403, 'kis bat ki jaldi hai sari requirement fill karo'))
-    }
+   
     const pass = bcryptjs.hashSync(password, 10)
     const rest = await User.create({ username, email, password: pass })
 
     return res.status(201).send({
       status: 'success',
-      message: 'user created',
+      message: 'user created succesfully',
       data: rest,
     })
   } catch (err) {
-    next(errorHandler(401, 'signup failed'))
+    return res.send({
+      status:500,
+      message:'problem in signup',
+      error:err.message
+    })
   }
 }
 
 export const signin = async (req, res, next) => {
   const { email, password } = req.body
-  if ((!email || !password || email === '', password === '')) {
-    next(errorHandler(400, 'requird all fileds'))
+  if ((!email || !password) || (email === ''||password === '')) {
+   return  next(errorHandler(400, 'requird all fileds email and password'))
   }
 
   try {
-    const validUser = await User.findOne({ email })
+    const validUser = await User.findOne({ email }).select('+password')
     if (!validUser) {
-      return next(errorHandler(404, 'data not found'))
+     return  next(errorHandler(404, 'data not found'))
     }
+console.log('valid user ',validUser)
     const validPassword = bcryptjs.compareSync(password, validUser.password)
     if (!validPassword) {
-      return next(errorHandler(400, 'wrong password'))
+      console.log('wrong password')
+     return next(errorHandler(401, 'wrong password'))
     }
 
     const token = jwt.sign({ id: validUser._id,isAdmin:validUser.isAdmin }, process.env.JWT_SECRET_KEY)
     const { password: pass, ...rest } = validUser._doc
-    res.status(200).cookie('access_token', token, { httpOnly: true }).json({
+    return res.status(200).cookie('access_token', token, { httpOnly: true }).json({
       status: 'success',
       message: 'login successfull',
-      data: rest,
+      data: rest,//don ot send data but right just for learning sending that 
       token,
     })
   } catch (err) {
-    next(errorHandler(404, 'page not found'))
+    next(errorHandler(500, 'Internal server error'))
   }
 }
 
 export const googleAuth = async (req, res, next) => {
   const { email, username, photo } = req.body
+
+  if ((!username || !photo || !email )|| username== ''||email === ''||photo === '') {
+   
+  
+    return res.send({
+      status:403,
+      message:'google se sari detail nahi mili lag raha',
+    })
+    }
+
+
+
+
   try {
     const user = await User.findOne({ email })
+
     if (user) {
       const token = jwt.sign({ id: user._id,isAdmin:user.isAdmin }, process.env.JWT_SECRET_KEY)
       const { password, ...rest } = user._doc;
-      res.status(200).cookie('access_token', token, { httpOnly: true }).json({
+      return res.status(200).cookie('access_token', token, { httpOnly: true }).json({
         status: 'success',
-        message: 'login successfull',
+        message: 'google login successfull',
         data: rest,
         token,
       })
@@ -83,13 +106,13 @@ export const googleAuth = async (req, res, next) => {
           Math.random().toString(9).slice(-4),
         password: hashedPassword,
       })
-      const token = jwt.sign({ id: newUser._id,isAdmin:newUser.isAdmin }, process.env.JWT_SECRET_KEY)
+      console.log(newUser)
+      // const token = jwt.sign({ id: newUser._id,isAdmin:newUser.isAdmin }, process.env.JWT_SECRET_KEY)
       const { password, ...rest } = newUser._doc
-      res.status(200).cookie('access_token', token, { httpOnly: true }).json({
+      return  res.status(200).json({
         status: 'success',
-        message: 'login successfull',
+        message: 'signup success successfull',
         data: rest,
-        token,
       })
     }
   } catch (err) {
@@ -100,8 +123,7 @@ export const googleAuth = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   let userId = req.user.id
   let paramId = req.params.id
-  console.log('userid',userId)
-  console.log("paramid",paramId)
+  
 
   if (userId !== paramId) {
     return next(errorHandler(401, 'you are not allowed to update this user'))
@@ -141,7 +163,7 @@ export const updateUser = async (req, res, next) => {
     }
 
     const { password, ...rest } = updatedUser._doc
-    res.status(200).json({
+    return res.status(200).json({
       status: 'success',
       message: 'user updated successfully',
       data: rest,

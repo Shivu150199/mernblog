@@ -25,22 +25,28 @@ const handleSubmit=async(e)=>{
 try{
 let res=await axios.post('/api/auth/v1/signup',formData)
 console.log(res)
+if(res.data.status==500){
+  setLoading(false)
+  alert(res.data.error)
+  setErrorMessage(res.data.message)
+  setTimeout(()=>{
+    setErrorMessage('')
+  },2000)
+  return
+}
+
 setLoading(false)
 
 navigate('/sign-in')
 }catch(err){
-console.log(err)
+console.log('error',err)
 setErrorMessage('username or email already taken')
 setTimeout(()=>{
   setErrorMessage('')
 },2000)
 
 setLoading(false)
-// setFormData({
-//   username:'',
-//   email:'',
-//   password:''
-// })
+
 }
 }
 const handleChange=(e)=>{

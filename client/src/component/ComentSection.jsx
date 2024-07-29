@@ -116,7 +116,7 @@ if(res.status==200){
                 <div>
 
 
-                    <Link className='btn bg-gradient-to-r from-green-400 to-blue-500 text-white mx-auto' to='sign-in'>
+                    <Link className='btn bg-gradient-to-r from-green-400 to-blue-500 text-white mx-auto' to='/sign-in'>
                         Go to sign in page
                     </Link>
                 </div>

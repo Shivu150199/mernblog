@@ -3,16 +3,16 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth'
 import { app } from '../firebase'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { signInPending, signInRejected, signInSuccess } from '../redux/authSlice'
+import { googlePending, googleRejected, googleSuccess } from '../redux/authSlice'
 import { useNavigate } from 'react-router-dom'
 const OAuth = () => {
   const dispatch=useDispatch()
-const {user,error,loading}=useSelector(state=>state.authState)
+const {error,loading}=useSelector(state=>state.authState)
 const navigate=useNavigate()
 const handleGoogle=async(e)=>{
 e.preventDefault()
-dispatch(signInPending())
 try{
+  dispatch(googlePending())
 const provider =new GoogleAuthProvider()
 const auth=getAuth(app)
 const result=await signInWithPopup(auth,provider)
@@ -24,16 +24,16 @@ let res = await axios.post('http://localhost:3000/api/auth/v1/googleauth', {
   photo: result.user.photoURL,
 })
 console.log(res.data)
-dispatch(signInSuccess(res.data))
+dispatch(googleSuccess(res.data))
 navigate('/dashboard?tab=profile')
 }catch(error){
-  dispatch(signInRejected(error))
+  dispatch(googleRejected(error))
 console.log(error)
 }
 }
   return (
     <div className='flex w-full mt-5'>
-      <button onClick={handleGoogle} className="capitalize bg-gradient-to-r from-red-700 via-slate-400 to-slate-300 btn w-full">
+      <button  onClick={handleGoogle} className="capitalize bg-gradient-to-r from-red-700 via-slate-400 to-slate-300 btn w-full">
      {loading?'loading....':'google sign in'}
       </button>
     </div>

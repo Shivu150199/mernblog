@@ -13,7 +13,7 @@ const Header = () => {
   const dispatch=useDispatch()
   const {user}=useSelector(state=>state.authState)
   const [searchTerm,setSearchTerm]=useState('')
-
+// console.log('user headerd',user?.data?.photo)
   const logout=async()=>{
     let res=await axios.post('/api/auth/v1/signout')
 
@@ -32,6 +32,7 @@ const Header = () => {
   },[path.search])
 
 
+  
 const handleSubmit=(e)=>{
 e.preventDefault()
 const urlParams=new URLSearchParams(path.search)
@@ -90,7 +91,7 @@ leChalo(`/search?${searchQuery}`)
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src={user&&user.data.photo}
+                  src={user&&user?.data?.photo}
                 />
               </div>
             </div>

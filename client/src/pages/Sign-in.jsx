@@ -7,7 +7,7 @@ import { signInPending, signInRejected, signInSuccess } from '../redux/authSlice
 import OAuth from '../component/OAuth'
 
 const Signin = () => {
-  const {loading,error,user}=useSelector(state=>state.authState)
+  const {loading}=useSelector(state=>state.authState)
  
   const [formData, setFormData] = useState({})
 
@@ -16,9 +16,15 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
   
-    dispatch(signInPending())
-    try {
+if(!email||!password){
+alert('Please! provide all feilds')
+return
+}
+
+try {
+  dispatch(signInPending())
       let res = await axios.post('/api/auth/v1/signin', formData)
+      console.log('signin response',res)
       dispatch(signInSuccess(res.data))
 
       navigate('/dashboard?tab=profile')
@@ -81,7 +87,7 @@ const Signin = () => {
           >
             {loading ? <span className="loading">loading</span> : 'Sign In'}
           </button>
-            {/* <OAuth/> */}
+            <OAuth/>
           {/* <p className="text-red-700 text-xs">{error&&error.message}</p> */}
           <div className="mt-4">
             <span>Do not have an account ?</span>
