@@ -27,11 +27,11 @@ const DashUsers = () => {
             }
 
         }
-        if (user.data.isAdmin) {
+        if (user.isAdmin) {
 
             fetchPosts()
         }
-    }, [user.data._id])
+    }, [user._id])
     const handleDelete = async (e) => {
         e.stopPropagation()
 
@@ -77,7 +77,7 @@ const DashUsers = () => {
 
     return (<div>
 
-        {user.data.isAdmin && userList.length > 0 ? (
+        {user.isAdmin && userList.length > 0 ? (
             <>
                 <Table hoverable className='shadow-md w-full'>
                     <Table.Head>

@@ -5,20 +5,33 @@ import { Badge } from 'flowbite-react'
 import { CiSearch} from 'react-icons/ci'
 import { IoIosMoon } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
-import { handleLogout } from '../redux/authSlice'
-import axios from 'axios'
+import {  signOutUser } from '../redux/authSlice'
+
+import { unwrapResult } from '@reduxjs/toolkit'
+
+
+
 
 const Header = () => {
+  
   const leChalo=useNavigate()
   const dispatch=useDispatch()
   const {user}=useSelector(state=>state.authState)
   const [searchTerm,setSearchTerm]=useState('')
 // console.log('user headerd',user?.data?.photo)
   const logout=async()=>{
-    let res=await axios.post('/api/auth/v1/signout')
 
-      dispatch(handleLogout())
-      leChalo('/sign-in')
+try{
+const resultAction=await dispatch(signOutUser())
+const user=unwrapResult(resultAction)
+if(user){
+  leChalo('/sign-in')
+}
+
+}catch(err){
+  console.log('failed in logout',err)
+}
+    
   }
   const path=useLocation()
   useEffect(()=>{
@@ -91,7 +104,7 @@ leChalo(`/search?${searchQuery}`)
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src={user&&user?.data?.photo}
+                  src={user&&user.photo}
                 />
               </div>
             </div>

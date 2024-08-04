@@ -23,7 +23,7 @@ const ComentSection = ({ postId }) => {
 
         try {
             setLoading(true)
-            const res = await axios.post('/api/comment/v1/create-comment', { content: comment, postId, userId: user.data._id })
+            const res = await axios.post('/api/comment/v1/create-comment', { content: comment, postId, userId: user._id })
           
             setLoading(false)
             setError(null)
@@ -107,9 +107,9 @@ if(res.status==200){
         <div className='w-80 md:w-[30rem]'>
             {user ? (<div className='flex gap-2 my-4 items-center'>
                 <p className='text-[1rem] font-bold'>Signed in as :</p>
-                <img className='w-5 h-5 object-cover rounded-full ' src={user.data.photo} alt="" />
+                <img className='w-5 h-5 object-cover rounded-full ' src={user.photo} alt="" />
                 <Link to='/dashboard?tab=profile'>
-                    <span className='text-cyan-500 hover:underline'>@{user.data.username}</span>
+                    <span className='text-cyan-500 hover:underline'>@{user.username}</span>
                 </Link>
 
             </div>) : (

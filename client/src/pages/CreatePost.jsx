@@ -5,24 +5,28 @@ import {
     uploadBytesResumable,
 } from 'firebase/storage'
 import { Button, FileInput, Select, TextInput } from 'flowbite-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import { app } from '../firebase';
-import { createPostFail, createPostPending, createPostSuccess } from '../redux/postSlice';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { createPost, createPostFail, createPostPending, createPostSuccess } from '../redux/postSlice';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { unwrapResult } from '@reduxjs/toolkit';
+
 
 const CreatePost = () => {
-    const{loading,error}=useSelector(state=>state.postState)
+    const{loading,newPost}=useSelector(state=>state.postState)
+    const quillRef = useRef(null);
+    const dispatch=useDispatch()
     const [imgFile, setImgFiles] = useState(null)
     const [fileUrl, setFileUrl] = useState(null)
     const [imageProgress, setImageProgress] = useState(0)
     const [fileUploadError, setFileUploadError] = useState(null)
     const [formData,setFormData]=useState(null)
-    // const [loading,setLoading]=useState(false)
+
     const navigate=useNavigate()
     const handleImageChange = (e) => {
         let file = e.target.files[0]
@@ -36,6 +40,7 @@ const CreatePost = () => {
     //         uploadImage()
     //     }
     // }, [files])
+
 
     const uploadImage = async() => {
         try{
@@ -63,34 +68,38 @@ const CreatePost = () => {
         )
     
     }catch(err){
-console.log(err)
+        toast(err.message)
+
     }
         
     }
-    console.log(formData)
-    console.log(imageProgress)
+
     const handleUpload=()=>{
         uploadImage()
     }
 const handleChange=(e)=>{
 setFormData({...formData,[e.target.id]:e.target.value})
-}
+} 
 const handleSubmit=async(e)=>{
-    console.log('hello')
+ 
 e.preventDefault()
 try{
-    createPostPending()
-const res=await axios.post('/api/post/v1/create',formData)
-console.log(res.data)
-createPostSuccess(res.data)
-navigate(`/post/${res.data.data.slug}`)
+    const resultAction=await dispatch(createPost({formData}))
+    const post=unwrapResult(resultAction)
+    if(post){
+        navigate(`/post/${newPost.slug}`)
+    }
+
 }catch(err){
     console.log(err)
-createPostFail(err)
 }
 
 }
 
+const handleQuill=()=>{
+    setFormData({...formData,content:quillRef.current.value})
+}
+console.log(formData)
     return (
         <div className='p-3 min-h-screen max-w-3xl mx-auto gap-4'>
             <h2 className='text-center text-3xl font-bold text-slate-700 tracking-wider mb-4'>Create Post</h2>
@@ -114,13 +123,14 @@ createPostFail(err)
             </form>
             <div className='flex justify-between mt-4 p-4 border-2 border-dashed border-sky-800 items-center gap-6'>
                 <FileInput accept='image/*' type='file' className='w-full' onChange={handleImageChange} />
-                <button className='btn btn-primary' onClick={handleUpload}>upload image</button>
+                <button className='btn btn-primary' onClick={handleUpload}>{imageProgress<100&&imageProgress>0?`${imageProgress} %`:imageProgress==100?"uploaded": "upload image"}</button>
 
             </div>
+            {imageProgress>0 &&imageProgress<100&&<p className=''>{imageProgress}</p>}
             <img src={fileUrl} alt="" />
             <div className='mt-6'>
-                <ReactQuill theme="snow" placeholder='Write something' className='h-72 mb-4' required onChange={(value)=>setFormData({...formData,content:value})} id='content' />
-                <Button onClick={handleSubmit} type='submit' className='btn w-full mt-20'>{loading?<span className='spinner'>loading</span>:"Publish"}</Button>
+                <ReactQuill ref={quillRef} theme="snow" placeholder='Write something' className='h-72 mb-4' required onChange={handleQuill} id='content' />
+                <Button disabled={loading}  onClick={handleSubmit} type='submit' className='btn w-full mt-20'>{loading?<span className='spinner'>loading</span>:"Publish"}</Button>
             </div>
 
 

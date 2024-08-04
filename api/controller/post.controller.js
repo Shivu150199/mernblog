@@ -1,13 +1,19 @@
 import Post from "../model/post.model.js"
 import { errorHandler } from "../utils/error.js"
 
-export const create=async(req,res,next)=>{
-console.log('req user',req.user)
+export const createPost=async(req,res,next)=>{
+
 if(!req.user.isAdmin){
-    return next(errorHandler(400,'not authorised'))
+    return res.send({
+        status:403,
+        message:'not authorised'
+    })
 }
 if(!req.body.title||!req.body.content){
-    return next(errorHandler(400,"required all fields"))
+    return res.send({
+        status:400,
+        message:'require all feilds'
+    })
 }
 const slug=req.body.title.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9-]/g,'- ')
 
@@ -18,13 +24,14 @@ const slug=req.body.title.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-
             userId:req.user.id
         })
 
-        res.status(200).json({
-            status:'success',
+        return res.send({
+            status:200,
+            message:'successfully created',
             data:newPost
         })
 
     }catch(err){
-        next(errorHandler(404,'not able to create the post'))
+        next(errorHandler(500,'not able to create the post'))
     }
 
 }
@@ -62,14 +69,20 @@ const oneMonthAgo=new Date(
 const lastMonthPosts=await Post.countDocuments({
     createdAt:{$gte:oneMonthAgo},
 })
-res.status(200).json({
+return res.send({
+    status:200,
+    message:'post get',
     posts,
     totalPosts,
     lastMonthPosts
 })
 }
 catch(err){
-    next(errorHandler(404,'api not working'))
+    return res.send({
+        status:500,
+        message:'internal server error',
+        error:err
+    })
 }
 }
 

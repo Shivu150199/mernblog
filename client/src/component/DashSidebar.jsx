@@ -38,7 +38,7 @@ const DashSidebar = () => {
               Profile
             </Sidebar.Item>
           </Link>
-          {user.data.isAdmin&& <Link to='/dashboard?tab=posts'>
+          {user.isAdmin&& <Link to='/dashboard?tab=posts'>
             <Sidebar.Item
               icon={HiDocumentText}
              
@@ -50,7 +50,7 @@ const DashSidebar = () => {
             </Sidebar.Item>
           </Link>
           }
-          {user.data.isAdmin&& <Link to='/dashboard?tab=users'>
+          {user.isAdmin&& <Link to='/dashboard?tab=users'>
             <Sidebar.Item
               icon={HiOutlineUserGroup}
              

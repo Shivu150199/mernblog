@@ -18,10 +18,13 @@ import {
   deleteUserSuccess,
   handleLogout,
 
+  signOutUser,
+
   updateUser,
 } from '../redux/authSlice'
 import DeleteModal from './DeleteModal'
-
+import Cookies from 'js-cookie' 
+import { unwrapResult } from '@reduxjs/toolkit'
 
 
 
@@ -66,10 +69,20 @@ const navigate=useNavigate()
 
 
 //   }
-const userId=user.data._id
+const userId=user._id
 const handleSubmit=async(e)=>{
   e.preventDefault()
-  dispatch(updateUser({userId,formData}))
+try{
+
+ let resultAction=await dispatch(updateUser({userId,formData}))
+ let user=unwrapResult(resultAction)
+ if(user){
+  console.log('hello')
+ }
+}catch(err){
+  console.log('updated error',err)
+}
+
 }  
 
 
@@ -79,11 +92,15 @@ const handleSubmit=async(e)=>{
 
   const handleImageChange = (e) => {
     let file = e.target.files[0]
+   
     if (file) {
       setImageFile(file)
       setImageFileURL(URL.createObjectURL(file))
     }
   }
+  // console.log(imageFile)
+  // console.log(imageFileURL)
+  // console.log() 
   //   rules_version = '2';
 
   // // Craft rules based on data in your Firestore database
@@ -147,10 +164,20 @@ dispatch(deleteUserRejected(err))
 
   }
 
-  const handleSignout=()=>{
-    dispatch(handleLogout())
+  const handleSignout=async()=>{
+    try{
+      const resultAction=await dispatch(signOutUser())
+      const user=unwrapResult(resultAction)
+      if(user){
+        navigate('/sign-in')
+      }
+      
+      }catch(err){
+        console.log('failed in logout',err)
+      }
+         
   }
-//  console.log(formData)
+
 
   return (
     <>
@@ -167,7 +194,7 @@ dispatch(deleteUserRejected(err))
       <div className="flex items-center justify-center relative">
         <p className="absolute top-2 left-2 text-white">{imageProgress} %</p>
         <img
-          src={imageFileURL || user.data.photo}
+          src={imageFileURL || user.photo}
           alt="profile"
           className="w-[3rem] h-[3rem] object-cover rounded"
           onClick={() => fileRef.current.click()}
@@ -187,7 +214,7 @@ dispatch(deleteUserRejected(err))
           placeholder="username"
           id="username"
           onChange={handleChange}
-          defaultValue={user.data.username}
+          defaultValue={user.username}
           />
       </div>
       <div className="w-full">
@@ -197,7 +224,7 @@ dispatch(deleteUserRejected(err))
           placeholder="Email"
           id="email"
           onChange={handleChange}
-          defaultValue={user.data.email}
+          defaultValue={user.email}
           />
       </div>
       <div className="w-full">
@@ -217,7 +244,7 @@ dispatch(deleteUserRejected(err))
         {loading ? <span className="loading">loading</span> : 'Update Profile'}
       </button>
       {
-        user.data.isAdmin&&(
+        user.isAdmin&&(
           <Link to='/create-post' className='w-full'>
           <button type='button'  className="btn bg-gradient-to-r from-green-400 to-blue-500 text-white hover:bg-blue-500 mt-4 w-full">Create a post</button>
           </Link>

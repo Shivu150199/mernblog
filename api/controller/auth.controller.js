@@ -19,7 +19,6 @@ export const signup = async (req, res) => {
    
     const pass = bcryptjs.hashSync(password, 10)
     const rest = await User.create({ username, email, password: pass })
-
     return res.status(201).send({
       status: 'success',
       message: 'user created succesfully',
@@ -43,25 +42,35 @@ export const signin = async (req, res, next) => {
   try {
     const validUser = await User.findOne({ email }).select('+password')
     if (!validUser) {
-     return  next(errorHandler(404, 'data not found'))
+     return  res.send({
+      status:404,
+  message:'data not found'
+     })
     }
-console.log('valid user ',validUser)
+
     const validPassword = bcryptjs.compareSync(password, validUser.password)
     if (!validPassword) {
       console.log('wrong password')
-     return next(errorHandler(401, 'wrong password'))
+     return    res.send({
+      status:401,
+  message:'Incorrect password'
+     })
     }
 
     const token = jwt.sign({ id: validUser._id,isAdmin:validUser.isAdmin }, process.env.JWT_SECRET_KEY)
     const { password: pass, ...rest } = validUser._doc
-    return res.status(200).cookie('access_token', token, { httpOnly: true }).json({
-      status: 'success',
-      message: 'login successfull',
-      data: rest,//don ot send data but right just for learning sending that 
-      token,
+    return res.cookie('access_token', token, { httpOnly: true }).send({
+      status:200,
+      message:'login Successfull',
+      data:rest,
+      token
     })
   } catch (err) {
-    next(errorHandler(500, 'Internal server error'))
+   return res.send({
+    status:500,
+    message:'internal server error',
+    error:err
+   })
   }
 }
 
@@ -86,8 +95,8 @@ export const googleAuth = async (req, res, next) => {
     if (user) {
       const token = jwt.sign({ id: user._id,isAdmin:user.isAdmin }, process.env.JWT_SECRET_KEY)
       const { password, ...rest } = user._doc;
-      return res.status(200).cookie('access_token', token, { httpOnly: true }).json({
-        status: 'success',
+      return res.cookie('access_token', token, { httpOnly: true }).send({
+        status: '200',
         message: 'google login successfull',
         data: rest,
         token,
@@ -106,17 +115,22 @@ export const googleAuth = async (req, res, next) => {
           Math.random().toString(9).slice(-4),
         password: hashedPassword,
       })
-      console.log(newUser)
-      // const token = jwt.sign({ id: newUser._id,isAdmin:newUser.isAdmin }, process.env.JWT_SECRET_KEY)
+     
+      const token = jwt.sign({ id: newUser._id,isAdmin:newUser.isAdmin }, process.env.JWT_SECRET_KEY)
       const { password, ...rest } = newUser._doc
-      return  res.status(200).json({
-        status: 'success',
-        message: 'signup success successfull',
+      return  res.cookie('access_token', token, { httpOnly: true }).send({
+        status: '200',
+        message: 'google signup  success successfull',
         data: rest,
+        token
       })
     }
   } catch (err) {
-    next(errorHandler(404, 'google login failed '))
+    return res.send({
+      status:500,
+      message:'internal server error',
+      error:err
+     })
   }
 }
 
@@ -126,25 +140,43 @@ export const updateUser = async (req, res, next) => {
   
 
   if (userId !== paramId) {
-    return next(errorHandler(401, 'you are not allowed to update this user'))
+    return res.send({
+      status:401,
+      message:'you are not allowed to update this user'
+    })
   }
 
   if (req.body.password) {
     if (req.body.password.length < 6) {
-      return next(errorHandler(403, 'password must be greater than 6 owrds'))
+      return res.send({
+        status:403,
+        message:'password must be greater than 6 word'
+      })
     }
     req.body.password = bcryptjs.hashSync(req.body.password, 10)
   }
 
   if (req.body.username) {
     if (req.body.username.length < 3 || req.body.username.length > 20) {
-      return next(errorHandler(403, 'username should not less than 3 or greater than 20'))
+      return res.send({
+        status:403,
+        message:'username should not less than 3 or greater than 20'
+      })
+      
     }
     if (req.body.username.includes(' ')) {
-      return next(errorHandler(403, 'username can not contains spaces'))
+      return res.send({
+        status:403,
+        message:'username can not contains spaces'
+      })
+      
     }
     if (req.body.username !== req.body.username.toLowerCase()) {
-      return next(errorHandler(403, 'username should be in lowercase'))
+      return res.send({
+        status:403,
+        message:'username should be in lowercase'
+      })
+     
     }
   }
 
@@ -159,17 +191,24 @@ export const updateUser = async (req, res, next) => {
       }
     }, {new: true})
     if (!updateUser) {
-      return next(errorHandler(404, 'user not found'))
+      return res.send({
+        status:404,
+        message:'user not found'
+      })
     }
 
     const { password, ...rest } = updatedUser._doc
-    return res.status(200).json({
-      status: 'success',
+    return res.send({
+      status: '200',
       message: 'user updated successfully',
       data: rest,
     })
   } catch (err) {
-    next(errorHandler(404, 'user update failes'))
+    return res.send({
+      status:500,
+      message:'internal server error',
+      error:err
+     })
   }
 }
 
@@ -202,7 +241,7 @@ res.status(204).json({
 export const signout=async(req,res,next)=>{
 
 try{
-res.clearCookie('access_token').status(200).json('user sign out successfully')
+return res.clearCookie('access_token').status(200).json('user sign out successfully')
 }
 catch(err){
 next(errorHandler(404,'not able to signout'))

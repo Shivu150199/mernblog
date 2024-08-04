@@ -9,6 +9,9 @@ import commentRouter from './route/comment.router.js'
 import path from 'path'
 dotenv.config()
 const app = express()
+const corsOption={
+  origin:''
+}
 
 const port = process.env.PORT || 3000
 

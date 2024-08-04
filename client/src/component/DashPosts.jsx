@@ -1,43 +1,45 @@
-import { nanoid } from '@reduxjs/toolkit'
+import { nanoid, unwrapResult } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { Table } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import DeleteModal from './DeleteModal'
+import { getAllPost } from '../redux/postSlice'
 
 const DashPosts = () => {
   const [showModel,setShowModel]=useState(false)
+  const dispatch=useDispatch()
   const { user } = useSelector(state => state.authState)
-  const [postList, setPostList] = useState([])
-  const [showMore,setShowMore]=useState(true)
+  const { postList ,showMore} = useSelector(state => state.postState)
+  
+ 
+  // const [showMore,setShowMore]=useState(true)
   const [postIdDelete,setPostIdDelete]=useState('')
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`/api/post/v1/get-post?userId=${user.data._id}`)
-        setPostList(res.data.posts)
-if(res.data.posts.length<9){
-  setShowMore(false)
-}
+       let resultAction=await dispatch(getAllPost(user._id))
+        unwrapResult(resultAction)
+
       } catch (err) {
         console.log(err)
       }
 
     }
-    if (user.data.isAdmin) {
+    if (user.isAdmin) {
 
       fetchPosts()
     }
-  }, [user.data._id])
+  }, [user._id])
 
 const handleDelete=async()=>{
 
   try{
 
-    const res=await axios.delete(`/api/post/v1/deletePost/${postIdDelete}/${user.data._id}`)
+    const res=await axios.delete(`/api/post/v1/deletePost/${postIdDelete}/${user._id}`)
     if(res.status===204){
-      setPostList(prev=>prev.filter(items=>items._id!==postIdDelete))
+      // setPostList(prev=>prev.filter(items=>items._id!==postIdDelete))
       }
   }
   catch(err){
@@ -50,13 +52,13 @@ const handleDelete=async()=>{
 const handleShowMore=async()=>{
   let startIndex=postList.length
   try{
-const res=await axios.get(`/api/post/v1/get-post?userId=${user.data._id}&startIndex=${startIndex}`)
+const res=await axios.get(`/api/post/v1/get-post?userId=${user._id}&startIndex=${startIndex}`)
 
 if(res.data.posts.length<9){
   setShowMore(false)
 }
 if(res.statusText==='OK'){
-  setPostList((prev)=>[...prev,...res.data.posts])
+  // setPostList((prev)=>[...prev,...res.data.posts])
 }
 
 
@@ -72,7 +74,7 @@ const handleClick = (id) => {
 
   return (<div>
 
-    {user.data.isAdmin && postList.length > 0 ? (
+    {user.isAdmin && postList.length > 0 ? (
       <>
         <Table hoverable className='shadow-md w-full'>
           <Table.Head>

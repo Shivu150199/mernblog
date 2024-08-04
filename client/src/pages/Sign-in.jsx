@@ -3,12 +3,18 @@ import { Label, TextInput } from 'flowbite-react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { signInPending, signInRejected, signInSuccess } from '../redux/authSlice'
+import { signInPending, signInRejected, signInSuccess, signInUser } from '../redux/authSlice'
 import OAuth from '../component/OAuth'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const Signin = () => {
-  const {loading}=useSelector(state=>state.authState)
- 
+  const {loading,error,user,token,isAuthenticated}=useSelector(state=>state.authState)
+ console.log(loading)
+ console.log('error responce',error)
+ console.log('user',user)
+ console.log('token',token)
+ console.log('is Authenticated',isAuthenticated)
+
   const [formData, setFormData] = useState({})
 
   const navigate = useNavigate()
@@ -21,18 +27,22 @@ alert('Please! provide all feilds')
 return
 }
 
-try {
-  dispatch(signInPending())
-      let res = await axios.post('/api/auth/v1/signin', formData)
-      console.log('signin response',res)
-      dispatch(signInSuccess(res.data))
+try{
 
-      navigate('/dashboard?tab=profile')
-    } catch (err) {
-      console.log(err)
-   
-      dispatch(signInRejected(err))
-    }
+  const resultAction=await dispatch(signInUser({formData}))
+  console.log(resultAction)
+  const user=unwrapResult(resultAction)
+  console.log(user)
+  if(user){
+    navigate('/dashboard?tab=profile')
+  }
+}
+
+catch(err){
+  console.log('failed to sign in ',err)
+}
+
+
   }
   const handleChange = (e) => {
     setFormData({

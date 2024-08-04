@@ -9,7 +9,7 @@ router.post('/signin',signin)
 router.post('/googleauth',googleAuth)
 router.put('/update/:id',varifyToken,updateUser)
 router.delete('/delete/:id',varifyToken,deleteUser)
-router.post('/signout',signout)
+router.post('/signout',varifyToken,signout)
 router.get('/get-user',varifyToken,getUsers)
 router.get('/:userId',getUserById)
 
