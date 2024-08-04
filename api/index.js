@@ -21,7 +21,9 @@ app.use(cookieParser())
 
 const __dirname=path.resolve()
 
-app.use('/api/auth/v1', authRou
+app.use('/api/auth/v1', authRouter)
+app.use('/api/post/v1', postRouter)
+app.use('/api/comment/v1', commentRouter)
 app.use(express.static(path.join(__dirname,'/client/dist')))
 
 
